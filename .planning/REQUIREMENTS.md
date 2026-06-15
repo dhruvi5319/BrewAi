@@ -146,20 +146,83 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| F0-01 – F0-06 | Phase 1 | Pending |
-| F7-01 – F7-08 | Phase 1 | Pending |
-| INF-01 – INF-06 | Phase 1 | Pending |
-| F1-01 – F1-08 | Phase 2 | Pending |
-| F2-01 – F2-10 | Phase 3 | Pending |
-| F3-01 – F3-09 | Phase 3 | Pending |
-| F4-01 – F4-08 | Phase 4 | Pending |
-| F5-01 – F5-07 | Phase 5 | Pending |
-| F6-01 – F6-08 | Phase 5 | Pending |
+| F0-01 | Phase 1 — Foundation | Pending |
+| F0-02 | Phase 1 — Foundation | Pending |
+| F0-03 | Phase 1 — Foundation | Pending |
+| F0-04 | Phase 1 — Foundation | Pending |
+| F0-05 | Phase 1 — Foundation | Pending |
+| F0-06 | Phase 1 — Foundation | Pending |
+| F7-01 | Phase 1 — Foundation | Pending |
+| F7-02 | Phase 1 — Foundation | Pending |
+| F7-03 | Phase 1 — Foundation | Pending |
+| F7-04 | Phase 1 — Foundation | Pending |
+| F7-05 | Phase 1 — Foundation | Pending |
+| F7-06 | Phase 1 — Foundation | Pending |
+| F7-07 | Phase 1 — Foundation | Pending |
+| F7-08 | Phase 1 — Foundation | Pending |
+| INF-01 | Phase 1 — Foundation | Pending |
+| INF-02 | Phase 1 — Foundation | Pending |
+| INF-03 | Phase 1 — Foundation | Pending |
+| INF-04 | Phase 1 — Foundation | Pending |
+| INF-05 | Phase 1 — Foundation | Pending |
+| INF-06 | Phase 1 — Foundation | Pending |
+| F1-01 | Phase 2 — Menu Browsing | Pending |
+| F1-02 | Phase 2 — Menu Browsing | Pending |
+| F1-03 | Phase 2 — Menu Browsing | Pending |
+| F1-04 | Phase 2 — Menu Browsing | Pending |
+| F1-05 | Phase 2 — Menu Browsing | Pending |
+| F1-06 | Phase 2 — Menu Browsing | Pending |
+| F1-07 | Phase 2 — Menu Browsing | Pending |
+| F1-08 | Phase 2 — Menu Browsing | Pending |
+| F2-01 | Phase 3 — Customization & Cart | Pending |
+| F2-02 | Phase 3 — Customization & Cart | Pending |
+| F2-03 | Phase 3 — Customization & Cart | Pending |
+| F2-04 | Phase 3 — Customization & Cart | Pending |
+| F2-05 | Phase 3 — Customization & Cart | Pending |
+| F2-06 | Phase 3 — Customization & Cart | Pending |
+| F2-07 | Phase 3 — Customization & Cart | Pending |
+| F2-08 | Phase 3 — Customization & Cart | Pending |
+| F2-09 | Phase 3 — Customization & Cart | Pending |
+| F2-10 | Phase 3 — Customization & Cart | Pending |
+| F3-01 | Phase 3 — Customization & Cart | Pending |
+| F3-02 | Phase 3 — Customization & Cart | Pending |
+| F3-03 | Phase 3 — Customization & Cart | Pending |
+| F3-04 | Phase 3 — Customization & Cart | Pending |
+| F3-05 | Phase 3 — Customization & Cart | Pending |
+| F3-06 | Phase 3 — Customization & Cart | Pending |
+| F3-07 | Phase 3 — Customization & Cart | Pending |
+| F3-08 | Phase 3 — Customization & Cart | Pending |
+| F3-09 | Phase 3 — Customization & Cart | Pending |
+| F4-01 | Phase 4 — Order Placement | Pending |
+| F4-02 | Phase 4 — Order Placement | Pending |
+| F4-03 | Phase 4 — Order Placement | Pending |
+| F4-04 | Phase 4 — Order Placement | Pending |
+| F4-05 | Phase 4 — Order Placement | Pending |
+| F4-06 | Phase 4 — Order Placement | Pending |
+| F4-07 | Phase 4 — Order Placement | Pending |
+| F4-08 | Phase 4 — Order Placement | Pending |
+| F5-01 | Phase 5 — Polish | Pending |
+| F5-02 | Phase 5 — Polish | Pending |
+| F5-03 | Phase 5 — Polish | Pending |
+| F5-04 | Phase 5 — Polish | Pending |
+| F5-05 | Phase 5 — Polish | Pending |
+| F5-06 | Phase 5 — Polish | Pending |
+| F5-07 | Phase 5 — Polish | Pending |
+| F6-01 | Phase 5 — Polish | Pending |
+| F6-02 | Phase 5 — Polish | Pending |
+| F6-03 | Phase 5 — Polish | Pending |
+| F6-04 | Phase 5 — Polish | Pending |
+| F6-05 | Phase 5 — Polish | Pending |
+| F6-06 | Phase 5 — Polish | Pending |
+| F6-07 | Phase 5 — Polish | Pending |
+| F6-08 | Phase 5 — Polish | Pending |
 
 **Coverage:**
-- v1 requirements: 57 total
-- Mapped to phases: 57
+- v1 requirements: 70 total (F0×6, F1×8, F2×10, F3×9, F4×8, F5×7, F6×8, F7×8, INF×6)
+- Mapped to phases: 70
 - Unmapped: 0 ✓
+
+*Note: REQUIREMENTS.md header previously stated 57 total; actual count by enumerated IDs is 70.*
 
 ---
 *Requirements defined: 2026-06-15*
