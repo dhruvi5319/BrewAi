@@ -12,7 +12,7 @@ BrewAI delivers a complete specialty coffee ordering experience in five phases t
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Design system, backend API, SQLite schema, and sandbox infrastructure — everything else builds on this
+- [x] **Phase 1: Foundation** - Design system, backend API, SQLite schema, and sandbox infrastructure — everything else builds on this
 - [ ] **Phase 2: Menu Browsing** - Full menu page with category filtering, search, loading/error/empty states, and product cards
 - [ ] **Phase 3: Customization & Cart** - Drink customization modal and cart management — the core ordering interaction loop
 - [ ] **Phase 4: Order Placement** - Order submission, persistence, and confirmation screen — completing the ordering flow
