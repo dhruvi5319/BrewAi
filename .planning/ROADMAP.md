@@ -49,7 +49,12 @@ Plans:
   3. User can type in the search box and see filtered results update within 200ms debounce
   4. User sees 8 skeleton cards while menu is loading, an error message with "Retry" if the API fails, and the message "No drinks match your search. Try 'cold brew' or browse All." when search/filter yields nothing
   5. Each product card shows the drink name in Playfair Display, description, price in amber, category badge, and either "Customize" or "Add to Cart" CTA
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Zustand menuStore + CategoryFilter + SearchInput (Wave 1, parallel with 02-02)
+- [ ] 02-02-PLAN.md — ProductCard + SkeletonGrid components (Wave 1, parallel with 02-01)
+- [ ] 02-03-PLAN.md — MenuPage assembly + Playwright e2e tests (Wave 2, depends on 02-01 + 02-02)
 
 ### Phase 3: Customization & Cart
 **Goal**: A customer can open a customization modal for any drink, configure all applicable options with real-time price feedback, add it to their cart, and manage cart contents before checking out
