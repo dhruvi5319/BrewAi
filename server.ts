@@ -1,10 +1,14 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import path from 'path';
-import { initDatabase } from './server/db/database';
-import { menuRouter } from './server/routes/menu';
-import { ordersRouter } from './server/routes/orders';
-import { errorHandler } from './server/middleware/errorHandler';
+import { fileURLToPath } from 'url';
+import { initDatabase } from './server/db/database.js';
+import { menuRouter } from './server/routes/menu.js';
+import { ordersRouter } from './server/routes/orders.js';
+import { errorHandler } from './server/middleware/errorHandler.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = parseInt(process.env.PORT ?? '3000', 10);

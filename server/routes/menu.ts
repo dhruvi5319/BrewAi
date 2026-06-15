@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
-import { db } from '../db/database';
-import type { ApiResponse, MenuItem } from '../types/api';
+import { db } from '../db/database.js';
+import type { ApiResponse, MenuItem } from '../types/api.js';
 
 export const menuRouter = Router();
 

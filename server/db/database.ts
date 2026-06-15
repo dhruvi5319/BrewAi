@@ -1,8 +1,8 @@
 import Database from 'better-sqlite3';
 import path from 'path';
 import fs from 'fs';
-import { createSchema } from './schema';
-import { seedMenu } from './seed';
+import { createSchema } from './schema.js';
+import { seedMenu } from './seed.js';
 
 const DB_PATH = process.env.DB_PATH ?? './data/brewai.db';
 

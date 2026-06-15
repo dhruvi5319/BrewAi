@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { db } from '../db/database';
+import { db } from '../db/database.js';
 import type {
   ApiResponse,
   OrderPayload,
@@ -7,7 +7,7 @@ import type {
   OrderResponse,
   OrderResponseItem,
   OrderLineItemCustomizations,
-} from '../types/api';
+} from '../types/api.js';
 
 export const ordersRouter = Router();
 
