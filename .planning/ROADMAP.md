@@ -30,7 +30,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. `POST /api/orders` accepts a valid payload and returns a `BRW-NNNNN` order reference with HTTP 201
   4. All design system primitives (Button, Card, Input, Modal, Spinner) render correctly with amber focus rings and correct colors
   5. Inter and Playfair Display fonts load from local assets — no CDN fetch at runtime
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Project scaffold: package.json, tsconfig files, vite/tailwind/postcss config, index.html, Dockerfile
+- [ ] 01-02-PLAN.md — Express backend: server.ts, SQLite schema + 21-item seed, all 5 API endpoints (Wave 2, parallel with 01-03)
+- [ ] 01-03-PLAN.md — Frontend foundation: shared TypeScript types, Framer Motion variants, API fetch helpers, global CSS + font imports, React root + App router (Wave 2, parallel with 01-02)
+- [ ] 01-04-PLAN.md — UI Primitives: Button, Badge, Card, Input, Select, Modal, Spinner + barrel export (Wave 3, depends on 01-02 + 01-03)
 
 ### Phase 2: Menu Browsing
 **Goal**: A customer can discover and browse the full drink menu — filtering by category, searching by keyword, and seeing every drink with its name, description, price, and action CTA
@@ -86,7 +92,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 0/4 | Not started | - |
 | 2. Menu Browsing | 0/TBD | Not started | - |
 | 3. Customization & Cart | 0/TBD | Not started | - |
 | 4. Order Placement | 0/TBD | Not started | - |
