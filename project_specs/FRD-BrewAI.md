@@ -369,7 +369,7 @@ The menu page is the primary customer-facing surface and the entry point to the 
 - Search filtering is case-insensitive and matches substrings in both `name` and `description`.
 - Search debounce is exactly 200ms to avoid excessive re-renders on rapid keystrokes.
 - The "All" pill is always rendered first, regardless of category sort order.
-- At most one category filter is active at a time (single-select).
+- At most one category filter is active at a time (single-select). Clicking the currently active category pill a second time resets the filter to "All".
 - Product card description is clamped at 2 lines via CSS `line-clamp-2`; full description is accessible in the customization modal.
 - Price is always displayed to 2 decimal places with a `$` prefix: `$4.50`.
 - If `hasCustomizations` is `true` on a menu item, the CTA reads "Customize"; otherwise it reads "Add to Cart".
@@ -384,7 +384,7 @@ The menu page is the primary customer-facing surface and the entry point to the 
 | `GET /api/menu` network failure | — (network error) | `MENU_FETCH_FAILED` | Error message + "Retry" button replaces skeleton grid |
 | `GET /api/menu` returns 500 | 500 | `INTERNAL_ERROR` | Same as above |
 | No items in database (empty seed) | 200 (empty array) | — | Empty state with "No drinks available yet" message |
-| Filter + search yields no results | 200 (filtered to empty) | — | Empty state with "No drinks match your search" + "Clear filters" |
+| Filter + search yields no results | 200 (filtered to empty) | — | Empty state with "No drinks match your search. Try 'cold brew' or browse All." + "Clear filters" button |
 
 ---
 
@@ -488,7 +488,7 @@ When a customer taps "Customize" on a menu item card, a modal dialog opens prese
 2. `selectedItem` is set in component state (or passed as prop); modal `isOpen` becomes `true`.
 3. Modal animates in (`scaleIn` + `fadeIn`; see F06).
 4. Modal fetches item customization options from `GET /api/menu/:id` (or uses cached data from Zustand `menuStore` if already loaded).
-5. Default selections are applied: smallest size (or "Medium" if available), first milk option, first temperature, "Double" shots for espresso, no add-ons, no special instructions, quantity = 1.
+5. Default selections are applied: "Medium" size if available in the item's sizes list, otherwise the first size in the list; first milk option; first temperature; "Double" shots for espresso; no add-ons; no special instructions; quantity = 1.
 6. Real-time price initializes to `base_price + default_size_delta`.
 7. User selects a size → `selectedSize` updates → real-time price recalculates.
 8. User selects a milk type → `selectedMilk` updates (no price impact in v1).
@@ -660,7 +660,7 @@ The cart is a persistent in-session store (Zustand) that accumulates the items a
 2. Cart drawer animates in (slide from right on desktop, slide up on mobile; see F06).
 3. Drawer renders all `CartItem` entries; if empty, renders empty state.
 4. Cart overlay (`bg-canvas/50`) dims the main content behind the drawer.
-5. User can close drawer by clicking the "×" button, pressing Escape, or clicking the overlay.
+5. User can close drawer by clicking the "×" button, pressing Escape, or clicking the backdrop overlay. On mobile (`< md`), the drawer uses `fixed inset-0` (full-screen) so there is no visible backdrop area — close is available via the "×" button and Escape key only.
 
 **Adjusting Quantity:**
 1. User clicks "+" → `cartStore.updateQuantity(cartItemId, currentQty + 1)`.
@@ -947,7 +947,7 @@ interface OrderLineItem {
 |-------|------|--------|-------------|
 | `items` | `OrderLineItem[]` | `cartStore.items` | Non-empty array; each item validated (see F03) |
 | `subtotal` | `number` | `cartStore.subtotal` | > 0 |
-| `notes` | `string` | Optional order-level field | Max 500 chars; empty string if not provided |
+| `notes` | `string` | Always `""` in v1 — no UI collects an order-level note; the field is included in the payload schema for future extensibility | Max 500 chars; always sent as empty string from the client in v1 |
 
 ---
 
@@ -1677,7 +1677,7 @@ CREATE INDEX IF NOT EXISTS idx_menu_items_available ON menu_items (available);
 - `base_price` is stored as `REAL` (SQLite float). Application code rounds to 2 decimal places.
 - `options_json` stores `null` for `shots` when `drink_type != 'espresso'`.
 - `sort_order` controls display sequence within a category (ascending).
-- `has_customizations` = 0 for items like a plain batch brew that has no meaningful customization options beyond quantity.
+- `has_customizations` = 0 for items like pour-overs that offer only size selection (no milk, temperature variation, shots, or extras worth surfacing in a modal). These items show an "Add to Cart" CTA that adds with the default (first) size and no other customizations applied. If a future pour-over item warrants a size-selection modal, set `has_customizations = 1`.
 
 ---
 
@@ -2336,7 +2336,7 @@ These error states are handled entirely in the frontend and do not involve API e
 
 | Error ID | Feature | Trigger | User-Facing Message | Recovery Action |
 |----------|---------|---------|---------------------|-----------------|
-| `MENU_FETCH_FAILED` | F01 | `GET /api/menu` network failure or 5xx | "Could not load the menu. Please check your connection." | "Retry" button re-fetches menu |
+| `MENU_FETCH_FAILED` | F01 | `GET /api/menu` network failure or 5xx (maps to server-side `DB_READ_ERROR` or network error) | "Could not load the menu. Please check your connection." | "Retry" button re-fetches menu |
 | `ITEM_OPTIONS_LOAD_FAILED` | F02 | `GET /api/menu/:id` failure in customization modal | "Could not load customization options. Please try again." | "Retry" button in modal |
 | `CART_ADD_FAILED` | F02, F03 | `cartStore.addItem()` throws unexpectedly | "Could not add item to cart. Please try again." | Toast auto-dismisses; user can retry manually |
 | `CART_EMPTY_SUBMIT` | F04 | "Place Order" clicked with empty cart (defensive) | (Button is disabled — message not shown) | N/A — button disabled |
@@ -2374,7 +2374,7 @@ These are not errors — they are expected empty-data conditions:
 
 | Condition | Feature | Display |
 |-----------|---------|---------|
-| Menu items filtered to zero results | F01 | Empty state: "No drinks match your search" + "Clear filters" link |
+| Menu items filtered to zero results | F01 | Empty state: "No drinks match your search. Try 'cold brew' or browse All." + "Clear filters" link |
 | Fresh database (no menu items) | F01 | Empty state: "No drinks available yet" (should not occur after seed) |
 | Cart is empty | F03 | Empty cart state: "Your cart is empty" + "Browse Menu" link |
 | Order history retrieval returns 404 | F04 | Redirect to menu page with a toast: "Order not found" |

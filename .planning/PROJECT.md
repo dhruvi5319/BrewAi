@@ -12,7 +12,7 @@ A customer can browse the full menu, customize their drink exactly how they want
 
 ### Validated
 
-(None yet — ship to validate)
+- Full spec suite validated 2026-06-15: PRD, FRD, UserStories, PERSONAS, JTBD, JOURNEYS, STORY-MAP all reviewed for clarity, completeness, and cross-document consistency. Nine issues resolved; documents updated in place.
 
 ### Active
 

@@ -135,7 +135,7 @@
 **Acceptance Criteria:**
 - [ ] A category filter bar renders one pill-shaped toggle per unique category (derived from API data — not hardcoded) plus an "All" pill that is active by default
 - [ ] Clicking a category pill filters the displayed cards to show only items in that category; the selected pill is visually highlighted with the accent color
-- [ ] Only one category filter can be active at a time (single-select); clicking the same pill again resets to "All"
+- [ ] Only one category filter can be active at a time (single-select); clicking the currently active pill a second time resets the filter to "All"
 - [ ] The "All" pill is always rendered first, regardless of alphabetical sort of other categories
 - [ ] Category filter changes take effect immediately (no loading state needed for client-side filtering)
 - [ ] On mobile, the category filter bar scrolls horizontally without causing page-level horizontal scroll
@@ -163,7 +163,7 @@
 
 **Acceptance Criteria:**
 - [ ] When the combined filter + search yields zero items, an empty state view is shown in place of the card grid
-- [ ] The empty state includes a descriptive message (e.g., "No drinks match your search") and a "Clear filters" action
+- [ ] The empty state includes a descriptive message ("No drinks match your search. Try 'cold brew' or browse All.") and a "Clear filters" action
 - [ ] Clicking "Clear filters" resets both `activeCategory` to `'All'` and `searchQuery` to `''`, restoring the full menu
 - [ ] The empty state is visually distinct from the loading skeleton (no skeleton placeholders shown during empty state)
 - [ ] If the API returns an empty array (no seeded items), a separate "No drinks available yet" message is shown without the "Clear filters" action
@@ -212,7 +212,7 @@
 **Acceptance Criteria:**
 - [ ] Size options (Small, Medium, Large) are displayed as a radio-style selector with the price delta shown next to each option (e.g., "Small −$0.50", "Medium $0.00", "Large +$0.75")
 - [ ] Selecting a size immediately updates the displayed total price using the formula: `(base_price + size_delta) + sum(selected addon prices)` × quantity
-- [ ] Medium is the default selected size when the modal opens (or the first size in the list if Medium is not available)
+- [ ] "Medium" is the default selected size when the modal opens if "Medium" is present in the item's sizes list; otherwise the first size in the list is selected by default
 - [ ] The per-item price and the total price (per-item × quantity) are both displayed in the modal footer
 - [ ] The "Add to Cart" button is not disabled by size selection alone (a default is always pre-selected)
 
