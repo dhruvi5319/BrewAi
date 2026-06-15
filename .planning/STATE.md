@@ -3,14 +3,14 @@ pivota_spec_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 01-foundation-01-PLAN.md
-last_updated: "2026-06-15T20:21:50.052Z"
+stopped_at: Completed 01-foundation-02-PLAN.md
+last_updated: "2026-06-15T20:28:12.635Z"
 last_activity: 2026-06-15 — Roadmap created; 5 phases derived from 70 v1 requirements
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 4
-  completed_plans: 1
+  completed_plans: 2
   percent: 25
 ---
 
@@ -53,6 +53,7 @@ Progress: [███░░░░░░░] 25%
 
 *Updated after each plan completion*
 | Phase 01-foundation P01 | 6min | 2 tasks | 10 files |
+| Phase 01-foundation P02 | 4min | 3 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -67,6 +68,8 @@ Recent decisions affecting current work:
 - [Init]: Single Express process serves both API and Vite static bundle on port 3000
 - [Phase 01-foundation]: better-sqlite3 bumped to ^12.0.0 for Node v25 compatibility (v9 V8 API incompatible)
 - [Phase 01-foundation]: Tailwind CSS v3 design tokens locked: 12 colors, Playfair Display + Inter fonts, 3 border radii
+- [Phase 01-foundation]: NodeNext/ESM used in tsconfig.server.json — package.json type:module requires ESM output
+- [Phase 01-foundation]: No helmet() middleware — no X-Frame-Options headers set for iframe embedding compatibility
 
 ### Pending Todos
 
@@ -78,6 +81,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-15T20:21:50.051Z
-Stopped at: Completed 01-foundation-01-PLAN.md
+Last session: 2026-06-15T20:28:12.633Z
+Stopped at: Completed 01-foundation-02-PLAN.md
 Resume file: None
