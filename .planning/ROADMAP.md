@@ -21,6 +21,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 ## Phase Details
 
 ### Phase 1: Foundation
+**Status**: In Progress
 **Goal**: The project boots, serves, and is ready for feature development — design tokens, component primitives, backend API, SQLite persistence, and sandbox configuration are all in place
 **Depends on**: Nothing (first phase)
 **Requirements**: F0-01, F0-02, F0-03, F0-04, F0-05, F0-06, F7-01, F7-02, F7-03, F7-04, F7-05, F7-06, F7-07, F7-08, INF-01, INF-02, INF-03, INF-04, INF-05, INF-06
