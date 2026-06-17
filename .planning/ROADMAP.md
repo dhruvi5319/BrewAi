@@ -40,7 +40,8 @@ Plans:
 - [ ] 01-04-PLAN.md — UI Primitives: Button, Badge, Card, Input, Select, Modal, Spinner + barrel export (Wave 3, depends on 01-02 + 01-03)
 
 ### Phase 2: Menu Browsing
-**Status**: Complete — 2026-06-17
+**Status**: completed (2026-06-17)
+**Last Updated**: 2026-06-17T17:25:51Z
 **Goal**: A customer can discover and browse the full drink menu — filtering by category, searching by keyword, and seeing every drink with its name, description, price, and action CTA
 **Depends on**: Phase 1
 **Requirements**: F1-01, F1-02, F1-03, F1-04, F1-05, F1-06, F1-07, F1-08
