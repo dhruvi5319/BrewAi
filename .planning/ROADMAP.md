@@ -87,7 +87,11 @@ Plans:
   3. Confirmation screen shows the full itemized order summary with customizations and the subtotal
   4. User can click "Start a New Order" on the confirmation screen and be returned to the menu with an empty cart
   5. If order submission fails, the user sees an inline error message and a "Try Again" button — their cart is not lost
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Wire Place Order in CartDrawer (loading/error/success) + ConfirmationPage + /confirmation route (Wave 1)
+- [ ] 04-02-PLAN.md — Playwright e2e tests covering all 5 success criteria (Wave 2, depends on 04-01)
 
 ### Phase 5: Polish
 **Goal**: The entire application is fully usable on any device from 390px mobile to 1920px desktop, with smooth Framer Motion animations on all meaningful UI transitions, and all motion respects `prefers-reduced-motion`
@@ -110,7 +114,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Foundation | 0/4 | Not started | - |
 | 2. Menu Browsing | 3/3 | Complete | 2026-06-17 |
 | 3. Customization & Cart | 0/4 | Not started | - |
-| 4. Order Placement | 0/TBD | Not started | - |
+| 4. Order Placement | 0/2 | Not started | - |
 | 5. Polish | 0/TBD | Not started | - |
 
 ---
