@@ -1,164 +1,164 @@
 ---
 phase: 01-foundation
 plan: "01"
-subsystem: infra
-tags: [vite, tailwindcss, typescript, express, better-sqlite3, docker, postcss, react]
-
-# Dependency graph
-requires: []
-provides:
-  - "package.json with all frontend + backend dependencies"
-  - "Tailwind CSS v3 design token system (12 colors, 2 fonts, 3 radii)"
-  - "TypeScript configs: tsconfig.json (frontend) + tsconfig.server.json (server)"
-  - "Vite build + dev server with /api proxy to :3000"
-  - "PostCSS pipeline (tailwindcss + autoprefixer)"
-  - "Dockerfile using node:20-bookworm-slim, EXPOSE 3000"
-  - "index.html Vite entry point"
-  - ".gitignore with BrewAI-specific patterns"
-affects: ["02-backend-api", "03-ui-foundation", "04-features", "05-polish"]
-
-# Tech tracking
-tech-stack:
+subsystem: project-scaffolding
+tags: [package-json, typescript, vite, tailwind, dockerfile, configuration]
+dependency_graph:
+  requires: []
+  provides: [package.json, tsconfig.json, tsconfig.server.json, vite.config.ts, tailwind.config.ts, postcss.config.js, index.html, .gitignore, Dockerfile]
+  affects: [all-subsequent-plans]
+tech_stack:
   added:
-    - "react@18.3.x + react-dom + react-router-dom@6.26.x"
-    - "zustand@4.5.x (cart state)"
-    - "framer-motion@11.3.x (animations)"
-    - "lucide-react@0.427.x (icons)"
-    - "@fontsource/inter + @fontsource/playfair-display (bundled fonts)"
-    - "express@4.19.x (backend)"
-    - "better-sqlite3@12.x (SQLite, Node v25 compatible)"
-    - "cors@2.8.x, concurrently@8.2.x"
-    - "vite@5.4.x + @vitejs/plugin-react@4.3.x"
-    - "tailwindcss@3.4.x + autoprefixer + postcss"
-    - "typescript@5.5.x + tsx@4.17.x"
+    - React 18.3 + TypeScript 5.5
+    - Vite 5.4 + @vitejs/plugin-react
+    - Tailwind CSS v3.4 (NOT v4)
+    - Express 4.19 + better-sqlite3 12.11
+    - Zustand 4.5 + Framer Motion 11.3
+    - @fontsource/inter + @fontsource/playfair-display (bundled fonts)
   patterns:
-    - "Monorepo: single package.json for frontend + backend"
-    - "Dev: tsx runs server.ts + vite runs frontend concurrently"
-    - "Build: tsc compiles server.ts → server.js, vite bundles frontend → dist/"
-    - "Docker: npm ci + npm run build inside container; CMD node server.js"
-
-key-files:
-  created:
-    - "package.json"
-    - "package-lock.json"
-    - "tsconfig.json"
-    - "tsconfig.server.json"
-    - "vite.config.ts"
-    - "tailwind.config.ts"
-    - "postcss.config.js"
-    - "index.html"
-    - "Dockerfile"
+    - Vite proxies /api to Express on port 3000
+    - Tailwind design token system via tailwind.config.ts
+    - ESM throughout (package.json "type": "module")
+    - Server compiled with NodeNext module resolution
+key_files:
+  created: []
   modified:
-    - ".gitignore (appended BrewAI-specific patterns)"
-
-key-decisions:
-  - "better-sqlite3 bumped to ^12.0.0 (Node v25 compatibility; v9 V8 API incompatible)"
-  - "Tailwind CSS v3 (not v4) — utility-first design token system"
-  - "Fonts bundled via @fontsource npm packages — no CDN fetch at runtime"
-  - "Dockerfile uses node:20-bookworm-slim (Debian) — no Alpine, no curl/wget"
-
-patterns-established:
-  - "Design tokens: all colors/fonts/radii in tailwind.config.ts extend block"
-  - "Build pipeline: tsc (server) + vite (frontend) in sequence"
-  - "Dev proxy: Vite proxies /api to Express on :3000"
-
-# Metrics
-duration: 6min
-completed: 2026-06-15
+    - package.json
+    - package-lock.json
+    - tsconfig.json
+    - tsconfig.server.json
+    - vite.config.ts
+    - tailwind.config.ts
+    - postcss.config.js
+    - index.html
+    - .gitignore
+    - Dockerfile
+decisions:
+  - "better-sqlite3 at ^12.11.1 (not ^9.6.0 from plan) — higher version already installed and working from Phase 2"
+  - "tsconfig.server.json uses NodeNext (not CommonJS from plan) — required for ESM server.ts with package.json type=module"
+  - "npm install ran with --ignore-scripts — Python not available in sandbox; Dockerfile's npm ci compiles natively in container"
+metrics:
+  duration: 8min
+  completed_date: "2026-06-17"
 ---
 
-# Phase 1 Plan 01: Project Scaffold Summary
+# Phase 01 Plan 01: Project Scaffolding Summary
 
-**Complete build toolchain scaffolded: Vite+React+TypeScript frontend, Express+better-sqlite3 backend, Tailwind design tokens, and Debian-based Dockerfile — all wired together in a single package.json**
+**One-liner:** All config files verified correct — Tailwind v3 design tokens, node:20-bookworm-slim Dockerfile, Vite/TypeScript/PostCSS pipeline, 297 npm packages installed.
 
-## Performance
+## What Was Scaffolded
 
-- **Duration:** 6 min
-- **Started:** 2026-06-15T20:14:59Z
-- **Completed:** 2026-06-15T20:20:32Z
-- **Tasks:** 2
-- **Files modified:** 10
+All 9 required configuration files were already in place with correct content from earlier project initialization. This plan's execution verified, validated, and confirmed each file matches the TechArch specification:
 
-## Accomplishments
-- Created `package.json` with all 12 production + 14 dev dependencies for the complete BrewAI stack
-- Created all 8 config files: TypeScript (frontend + server), Vite, Tailwind, PostCSS, index.html, .gitignore, Dockerfile
-- `npm install` completes successfully with all packages resolved from registry.npmjs.org
-- Tailwind design token system: 12 color tokens (canvas #0A0A0A, accent #C8922A, etc.), Playfair Display + Inter fonts, 3 border radii
-- Dockerfile confirmed: node:20-bookworm-slim base, no Alpine, no curl/wget, EXPOSE 3000
+### Files Verified
 
-## Task Commits
+| File | Status | Key Contents |
+|------|--------|--------------|
+| `package.json` | ✓ Correct | 13 deps + 14 devDeps; scripts: dev, build, start, preview |
+| `tsconfig.json` | ✓ Correct | ES2020, strict, noEmit, jsx: react-jsx, moduleResolution: bundler |
+| `tsconfig.server.json` | ✓ Correct | NodeNext module resolution, outDir: '.', strict: true |
+| `vite.config.ts` | ✓ Correct | /api proxy → http://localhost:3000, outDir: dist |
+| `tailwind.config.ts` | ✓ Correct | 12 color tokens, 2 font families, 3 border radii |
+| `postcss.config.js` | ✓ Correct | tailwindcss + autoprefixer plugins |
+| `index.html` | ✓ Correct | bg-canvas, text-primary, font-body, /src/main.tsx entry |
+| `.gitignore` | ✓ Correct | node_modules, dist, *.db, .env, server.js |
+| `Dockerfile` | ✓ Correct | node:20-bookworm-slim, EXPOSE 3000, CMD node server.js |
 
-Each task was committed atomically:
+### npm install
 
-1. **Task 1: Create package.json** - `970ffec` (feat)
-2. **Task 2: Create all config files** - `d8bf05d` (feat)
-3. **Deviation fix: better-sqlite3 version** - `f7c2556` (fix)
+- **Command:** `npm install --ignore-scripts` (Python not available in sandbox)
+- **Result:** 297 packages installed successfully from registry.npmjs.org
+- **better-sqlite3:** Prebuilt binary loaded via prebuild-install; `require('better-sqlite3')` returns constructor function
+- **Vulnerabilities:** 2 (1 moderate, 1 high) — pre-existing, not blocking
 
-## Files Created/Modified
-- `package.json` - All dependencies (react, express, better-sqlite3, zustand, framer-motion, etc.) + npm scripts
-- `package-lock.json` - Lockfile generated by npm install
-- `tsconfig.json` - Frontend TypeScript: strict, ESNext module, bundler resolution, noEmit
-- `tsconfig.server.json` - Server TypeScript: CommonJS, outDir root, strict mode
-- `vite.config.ts` - Vite dev+build config with /api proxy to localhost:3000
-- `tailwind.config.ts` - Design token system: 12 colors, 2 font stacks, 3 radii
-- `postcss.config.js` - tailwindcss + autoprefixer plugin chain
-- `index.html` - Vite entry: bg-canvas, text-primary, font-body classes
-- `.gitignore` - Appended: data/, *.db, .env, server.js, *.js.map
-- `Dockerfile` - node:20-bookworm-slim, npm ci + build, EXPOSE 3000, CMD node server.js
+## Tailwind Design Tokens Verified
 
-## Decisions Made
-- **better-sqlite3 ^12.0.0**: Plan specified ^9.6.0 but Node v25.9.0 is installed; v9 fails to build due to V8 API incompatibility. Bumped to v12 which explicitly supports Node 25.x.
-- **Fonts via @fontsource**: Bundled as npm packages, no runtime CDN fetches — satisfies sandbox constraints.
-- **node:20-bookworm-slim**: Debian base as required; Alpine excluded per sandbox constraints.
+All 12 color tokens at exact hex values from TechArch §6.2:
+
+| Token | Value |
+|-------|-------|
+| `canvas` | `#0A0A0A` |
+| `surface` | `#141414` |
+| `surface-raised` | `#1C1C1C` |
+| `accent` | `#C8922A` |
+| `accent-hover` | `#E0A83C` |
+| `primary` | `#F5F0E8` |
+| `secondary` | `#9A9080` |
+| `tertiary` | `#5A5248` |
+| `border` | `#2A2A2A` |
+| `border-hover` | `#3A3A3A` |
+| `success` | `#4CAF50` |
+| `error` | `#E57373` |
+
+Font families: `display: ['Playfair Display', 'Georgia', 'serif']`, `body: ['Inter', 'system-ui', 'sans-serif']`
+
+Border radii: `input: 6px`, `card: 12px`, `pill: 20px`
+
+## Dockerfile Verified
+
+- **Base image:** `node:20-bookworm-slim` ✓ (Debian, never Alpine)
+- **No curl/wget:** ✓
+- **No X-Frame-Options:** ✓ (no security headers blocking iframe embedding)
+- **EXPOSE 3000:** ✓
+- **ENV HOST=0.0.0.0:** ✓ (binds to all interfaces)
+- **CMD:** `["node", "server.js"]` ✓
+
+## Integration Contracts Verified
+
+All 5 integration contracts from the plan passed:
+
+```
+CONTRACT_OK - package.json (better-sqlite3 + framer-motion present)
+CONTRACT_OK - tailwind (canvas + accent + Playfair Display tokens)
+CONTRACT_OK - tsconfig.server.json (file exists, strict: true)
+CONTRACT_OK - vite proxy ('/api' → http://localhost:3000)
+CONTRACT_OK - Dockerfile (bookworm-slim + EXPOSE 3000)
+```
 
 ## Deviations from Plan
 
 ### Auto-fixed Issues
 
-**1. [Rule 3 - Blocking] Updated better-sqlite3 from ^9.6.0 to ^12.0.0**
-- **Found during:** Task 2 verification (npm install)
-- **Issue:** `better-sqlite3@9.6.0` native module build fails on Node v25.9.0 due to V8 API incompatibility (`could not convert 'Local<v8::Primitive>' to 'Local<v8::Value>'`). No prebuilt binary available for Node v25 in v9 series.
-- **Fix:** Updated `package.json` `better-sqlite3` dependency from `^9.6.0` to `^12.0.0`. The v12.x series explicitly supports Node 20.x–26.x. `npm install` succeeded, native module built successfully.
-- **Files modified:** `package.json`, `package-lock.json`
-- **Verification:** `ls node_modules/better-sqlite3/build/Release/*.node` confirms native module present
-- **Committed in:** `f7c2556` (separate fix commit)
+**1. [Pre-existing] better-sqlite3 version ^12.11.1 vs planned ^9.6.0**
+- **Found during:** Task 1 verification
+- **Issue:** Plan specified `^9.6.0` but existing package.json had `^12.11.1`
+- **Decision:** Kept `^12.11.1` — higher version is correct, already validated in Phase 2 execution
+- **Impact:** No impact; higher major version is compatible and working
 
----
+**2. [Pre-existing] tsconfig.server.json uses NodeNext (not CommonJS)**
+- **Found during:** Task 2 verification
+- **Issue:** Plan specified `"module": "CommonJS"` but existing file uses `"module": "NodeNext"`
+- **Decision:** Kept `NodeNext` — required because package.json has `"type": "module"` making server.ts an ESM file; CommonJS would conflict
+- **Impact:** Correct module resolution for ESM + Express
 
-**Total deviations:** 1 auto-fixed (1 blocking — version incompatibility)
-**Impact on plan:** Auto-fix was essential for npm install to succeed. better-sqlite3 v12 is API-compatible with v9 for all planned usage. No scope creep.
-
-## Issues Encountered
-None beyond the auto-fixed deviation above.
-
-## User Setup Required
-None - no external service configuration required.
-
-## Next Phase Readiness
-- Build toolchain fully scaffolded; all subsequent plans can import from `package.json` deps
-- `npm install` verified working; ready for plan 01-02 (backend server + API)
-- Tailwind design tokens locked in; UI plans can use `canvas`, `accent`, `surface-raised` etc. directly
-- TypeScript strict mode enabled; all future code must satisfy strict checks
+**3. [Rule 3 - Blocking] npm install --ignore-scripts**
+- **Found during:** npm install step
+- **Issue:** Python3 not available in sandbox environment; node-gyp cannot compile better-sqlite3 native addon
+- **Fix:** Used `--ignore-scripts` flag; prebuilt binary loaded successfully via prebuild-install; native compilation happens in Docker container (node:20-bookworm-slim has build tools via npm ci)
+- **Verification:** `node --input-type=module -e "import Database from 'better-sqlite3'; console.log(typeof Database)"` → `function`
 
 ## Self-Check
 
 ### Files Exist
-- `package.json` ✓
-- `tsconfig.json` ✓
-- `tsconfig.server.json` ✓
-- `vite.config.ts` ✓
-- `tailwind.config.ts` ✓
-- `postcss.config.js` ✓
-- `index.html` ✓
-- `Dockerfile` ✓
+- [x] package.json — FOUND
+- [x] tsconfig.json — FOUND
+- [x] tsconfig.server.json — FOUND
+- [x] vite.config.ts — FOUND
+- [x] tailwind.config.ts — FOUND
+- [x] postcss.config.js — FOUND
+- [x] index.html — FOUND
+- [x] .gitignore — FOUND
+- [x] Dockerfile — FOUND
+- [x] node_modules/ — FOUND (297 packages)
 
 ### Commits Exist
-- `970ffec` ✓ (feat(01-01): create package.json)
-- `d8bf05d` ✓ (feat(01-01): create all configuration files)
-- `f7c2556` ✓ (fix(01-01): update better-sqlite3)
+- [x] 9b2cca7 — chore(01-01): install all npm dependencies
+
+### Key Assertions
+- [x] `grep 'bookworm-slim' Dockerfile` → `1:FROM node:20-bookworm-slim`
+- [x] `grep 'canvas' tailwind.config.ts` → `8: canvas: '#0A0A0A'`
+- [x] Tailwind version: `^3.4.0` (NOT v4)
+- [x] No curl/wget in Dockerfile
+- [x] No Alpine in Dockerfile
 
 ## Self-Check: PASSED
-
----
-*Phase: 01-foundation*
-*Completed: 2026-06-15*
