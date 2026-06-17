@@ -120,3 +120,13 @@ opencode.json.bak
 AGENTS.md
 .opencode.session
 # <<< pivota:gitignore-managed
+
+# ── BrewAI project-specific ──
+dist-server/
+data/
+*.db
+.env
+.env.local
+server.js
+server/**/*.js
+*.js.map
