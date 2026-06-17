@@ -68,7 +68,13 @@ Plans:
   3. User can open the cart drawer and see each item with its customization summary (e.g., "Large · Oat · Iced"), quantity stepper, and line total
   4. User can increase/decrease item quantity, remove individual items, and clear the entire cart (with confirmation)
   5. Cart subtotal updates in real time as items change; cart badge reflects total item count
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Zustand cartStore (merge rule, derived state) + install sonner (Wave 1)
+- [ ] 03-02-PLAN.md — CustomizationModal: all conditional selectors, real-time price, add-to-cart dispatch (Wave 2, depends on 03-01)
+- [ ] 03-03-PLAN.md — CartBadge + CartItem + CartDrawer components (Wave 2, parallel with 03-02, depends on 03-01)
+- [ ] 03-04-PLAN.md — App wiring: MenuPage + Navigation + Toaster + Playwright e2e tests (Wave 3, depends on 03-02 + 03-03)
 
 ### Phase 4: Order Placement
 **Goal**: A customer can submit their cart as an order, see a loading state during submission, and land on a confirmation screen showing their order reference number and itemized summary
@@ -102,7 +108,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/4 | Not started | - |
 | 2. Menu Browsing | 3/3 | Complete | 2026-06-17 |
-| 3. Customization & Cart | 0/TBD | Not started | - |
+| 3. Customization & Cart | 0/4 | Not started | - |
 | 4. Order Placement | 0/TBD | Not started | - |
 | 5. Polish | 0/TBD | Not started | - |
 
