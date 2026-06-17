@@ -2,16 +2,16 @@
 pivota_spec_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: planning
-stopped_at: Completed 03-01-PLAN.md
-last_updated: "2026-06-17T17:40:08.189Z"
-last_activity: 2026-06-17 — Phase 2 executed; 3 plans complete across 2 waves
+status: executing
+stopped_at: Completed 03-02-PLAN.md
+last_updated: "2026-06-17T17:43:22.366Z"
+last_activity: 2026-06-17 — Phase 3 started; 03-01 cartStore + sonner installed
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 11
-  completed_plans: 8
-  percent: 73
+  completed_plans: 9
+  percent: 82
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-06-15)
 ## Current Position
 
 Phase: 3 of 5 (Customization & Cart) — In progress
-Plan: 1 of 8 in phase 3 — Complete
-Status: Phase 3 in progress — 03-01 cartStore complete, ready for 03-02
-Last activity: 2026-06-17 — Phase 3 started; 03-01 cartStore + sonner installed
+Plan: 2 of 8 in phase 3 — Complete
+Status: Phase 3 in progress — 03-02 CustomizationModal complete, ready for 03-03
+Last activity: 2026-06-17 — Phase 3 continued; CustomizationModal with conditional selectors and real-time price
 
-Progress: [███████░░░] 73%
+Progress: [████████░░] 82%
 
 ## Performance Metrics
 
@@ -56,6 +56,7 @@ Progress: [███████░░░] 73%
 | Phase 02-menu-browsing P01 | 10min | 2 tasks | 3 files |
 | Phase 02-menu-browsing P03 | 2min | 2 tasks | 4 files |
 | Phase 03-customization-cart P01 | 5min | 2 tasks | 3 files |
+| Phase 03-customization-cart P02 | 5min | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -75,6 +76,8 @@ Recent decisions affecting current work:
 - [Phase 02-menu-browsing]: MenuPage assembled as integration layer replacing MenuPlaceholder in App.tsx; E2e tests target Vite dev server (5173) proxying to Express API (3000)
 - [Phase 03-customization-cart]: CartState local interface (not CartStore import) keeps Zustand state self-contained; satisfies CartStore contract by structural typing
 - [Phase 03-customization-cart]: canonicalCustomizations uses explicit key ordering for merge correctness; addons array sorted before stringify
+- [Phase 03-customization-cart]: Guard renders minimal Modal when item=null to prevent null-reference errors before price computation
+- [Phase 03-customization-cart]: sr-only radio/checkbox inputs with styled label give full visual control over selection chips while remaining accessible
 
 ### Pending Todos
 
@@ -86,6 +89,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-17T17:40:08.187Z
-Stopped at: Completed 03-01-PLAN.md
+Last session: 2026-06-17T17:43:22.365Z
+Stopped at: Completed 03-02-PLAN.md
 Resume file: None
