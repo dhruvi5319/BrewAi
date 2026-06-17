@@ -1,8 +1,8 @@
 {
   "generator_version": "init-dev-server@1",
   "catalog_entry": null,
-  "generated_at": "2026-06-17T15:30:00Z",
-  "inspection_inputs_hash": "07fb80732bc0a8171cd33808e73e8aa5f3ffa5f3d672dde9d0dd9c3679e6f168",
+  "generated_at": "2026-06-17T15:33:52Z",
+  "inspection_inputs_hash": "729c21c5736b1aa03fa9b0291038522aa8e94a957e6ed24db2094842deac10aa",
   "inspection_inputs": {
     "matched_globs": [
       "package.json",
@@ -11,8 +11,9 @@
     "manifest_signatures": [
       "package.json:dep:concurrently",
       "package.json:dep:express",
-      "package.json:dev-script:concurrently \"tsx server.ts\" \"vite\"",
-      "package.json:devDep:vite"
+      "package.json:dep:tsx",
+      "package.json:dep:vite",
+      "package.json:dev-script:concurrently \"tsx server.ts\" \"vite\""
     ],
     "existing_scripts": []
   }
