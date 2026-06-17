@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-15)
 
 **Core value:** A customer can browse the full menu, customize their drink exactly how they want it, and place an order — seamlessly, beautifully, on any device.
-**Current focus:** Phase 1 — Foundation
+**Current focus:** Phase 3 — Customization & Cart
 
 ## Current Position
 
-Phase: 1 of 5 (Foundation)
-Plan: 0 of TBD in current phase
-Status: Ready to plan
-Last activity: 2026-06-15 — Roadmap created; 5 phases derived from 70 v1 requirements
+Phase: 2 of 5 (Menu Browsing) — Complete
+Plan: 3 of 3 in phase 2
+Status: Phase 2 complete — ready for Phase 3 planning
+Last activity: 2026-06-17 — Phase 2 executed; 3 plans complete across 2 waves
 
 Progress: [█░░░░░░░░░] 14%
 

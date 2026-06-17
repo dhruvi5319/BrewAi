@@ -12,8 +12,8 @@ BrewAI delivers a complete specialty coffee ordering experience in five phases t
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [x] **Phase 1: Foundation** - Design system, backend API, SQLite schema, and sandbox infrastructure — everything else builds on this
-- [ ] **Phase 2: Menu Browsing** - Full menu page with category filtering, search, loading/error/empty states, and product cards
+- [ ] **Phase 1: Foundation** - Design system, backend API, SQLite schema, and sandbox infrastructure — everything else builds on this
+- [x] **Phase 2: Menu Browsing** - Full menu page with category filtering, search, loading/error/empty states, and product cards
 - [ ] **Phase 3: Customization & Cart** - Drink customization modal and cart management — the core ordering interaction loop
 - [ ] **Phase 4: Order Placement** - Order submission, persistence, and confirmation screen — completing the ordering flow
 - [ ] **Phase 5: Polish** - Responsive layout, animations, and micro-interactions — seamlessly, beautifully, on any device
@@ -40,7 +40,7 @@ Plans:
 - [ ] 01-04-PLAN.md — UI Primitives: Button, Badge, Card, Input, Select, Modal, Spinner + barrel export (Wave 3, depends on 01-02 + 01-03)
 
 ### Phase 2: Menu Browsing
-**Status**: In Progress
+**Status**: Complete — 2026-06-17
 **Goal**: A customer can discover and browse the full drink menu — filtering by category, searching by keyword, and seeing every drink with its name, description, price, and action CTA
 **Depends on**: Phase 1
 **Requirements**: F1-01, F1-02, F1-03, F1-04, F1-05, F1-06, F1-07, F1-08
@@ -53,9 +53,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Zustand menuStore + CategoryFilter + SearchInput (Wave 1, parallel with 02-02)
-- [ ] 02-02-PLAN.md — ProductCard + SkeletonGrid components (Wave 1, parallel with 02-01)
-- [ ] 02-03-PLAN.md — MenuPage assembly + Playwright e2e tests (Wave 2, depends on 02-01 + 02-02)
+- [x] 02-01-PLAN.md — Zustand menuStore + CategoryFilter + SearchInput (Wave 1, parallel with 02-02)
+- [x] 02-02-PLAN.md — ProductCard + SkeletonGrid components (Wave 1, parallel with 02-01)
+- [x] 02-03-PLAN.md — MenuPage assembly + Playwright e2e tests (Wave 2, depends on 02-01 + 02-02)
 
 ### Phase 3: Customization & Cart
 **Goal**: A customer can open a customization modal for any drink, configure all applicable options with real-time price feedback, add it to their cart, and manage cart contents before checking out
@@ -100,7 +100,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/4 | Not started | - |
-| 2. Menu Browsing | 0/TBD | Not started | - |
+| 2. Menu Browsing | 3/3 | Complete | 2026-06-17 |
 | 3. Customization & Cart | 0/TBD | Not started | - |
 | 4. Order Placement | 0/TBD | Not started | - |
 | 5. Polish | 0/TBD | Not started | - |
