@@ -1,9 +1,9 @@
 ---
-status: complete
+status: diagnosed
 phase: 01-foundation
 source: 01-01-SUMMARY.md, 01-02-SUMMARY.md, 01-03-SUMMARY.md, 01-04-SUMMARY.md
 started: 2026-06-17T14:33:00Z
-updated: 2026-06-17T14:45:00Z
+updated: 2026-06-17T14:51:00Z
 ---
 
 ## Current Test
@@ -51,7 +51,10 @@ skipped: 1
   reason: "User reported: Server returns an error"
   severity: major
   test: 3
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "API works correctly but requires full payload: subtotal (number), items[].name (string), items[].unitPrice (number), items[].customizations.size (string). Test was run with incomplete payload missing these required fields. The API returns 400 INVALID_PAYLOAD when any required field is absent — this is correct validation behavior, not a bug. Full valid payload confirmed to return HTTP 201 + BRW-00001."
+  artifacts:
+    - path: "server/routes/orders.ts"
+      issue: "validateOrderPayload() requires subtotal, items[].name, items[].unitPrice, items[].customizations.size — these were missing from the test curl command"
+  missing:
+    - "No change needed to the API — it works correctly. Test documentation should include the full required payload shape."
+  debug_session: "inline diagnosis — curl with full payload confirmed 201 + BRW-00001"
