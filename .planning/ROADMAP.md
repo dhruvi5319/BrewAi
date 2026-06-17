@@ -103,6 +103,12 @@ Plans:
   3. Menu cards stagger-animate into view on load; category filter pills animate on click; customization modal and cart drawer animate open/close with 150–200ms transitions
   4. All interactive elements (buttons, steppers, cart icon) have 44×44px minimum touch targets
   5. Setting `prefers-reduced-motion: reduce` in the OS disables all Framer Motion transforms and transitions globally
+**Plans**: 3 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Navigation (responsive compact/desktop) + MenuPage grid + overflow guard + touch targets (Wave 1, parallel with 05-02)
+- [ ] 05-02-PLAN.md — CartDrawer + CustomizationModal responsive layout + AnimatePresence + CartBadge pop animation (Wave 1, parallel with 05-01)
+- [ ] 05-03-PLAN.md — ProductCard stagger + MenuPage AnimatePresence popLayout + human-verify checkpoint (Wave 2, depends on 05-01 + 05-02)
 
 ## Progress
 
@@ -115,7 +121,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Menu Browsing | 3/3 | Complete | 2026-06-17 |
 | 3. Customization & Cart | 0/4 | Not started | - |
 | 4. Order Placement | 0/2 | Not started | - |
-| 5. Polish | 0/TBD | Not started | - |
+| 5. Polish | 0/3 | Not started | - |
 
 ---
 *Roadmap created: 2026-06-15*
