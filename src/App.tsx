@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useReducedMotion } from './lib/motion';
 import { pageVariants } from './lib/motion';
 import { MenuPage } from './pages/MenuPage';
+import { Navigation } from './components/layout/Navigation';
 
 function ConfirmationPlaceholder() {
   return (
@@ -20,19 +21,22 @@ export default function App() {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={location.pathname}
-        variants={shouldReduceMotion ? {} : pageVariants}
-        initial={shouldReduceMotion ? false : 'hidden'}
-        animate="visible"
-        exit={shouldReduceMotion ? undefined : 'exit'}
-      >
-        <Routes location={location}>
-          <Route path="/" element={<MenuPage />} />
-          <Route path="/confirmation" element={<ConfirmationPlaceholder />} />
-        </Routes>
-      </motion.div>
-    </AnimatePresence>
+    <>
+      <Navigation />
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={location.pathname}
+          variants={shouldReduceMotion ? {} : pageVariants}
+          initial={shouldReduceMotion ? false : 'hidden'}
+          animate="visible"
+          exit={shouldReduceMotion ? undefined : 'exit'}
+        >
+          <Routes location={location}>
+            <Route path="/" element={<MenuPage />} />
+            <Route path="/confirmation" element={<ConfirmationPlaceholder />} />
+          </Routes>
+        </motion.div>
+      </AnimatePresence>
+    </>
   );
 }
