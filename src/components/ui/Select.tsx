@@ -47,7 +47,6 @@ export function Select({
           'hover:border-border-hover',
           disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
           'min-h-[44px]',
-          // Ensure native select arrow is visible on dark background
           'appearance-none',
         ].join(' ')}
       >

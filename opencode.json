@@ -1,0 +1,26 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "anthropic/claude-sonnet-4-6",
+  "permission": {
+    "bash": {
+      "*": "allow"
+    },
+    "edit": {
+      "*": "allow"
+    },
+    "external_directory": {
+      "~/.config/opencode/agents/**": "allow",
+      "~/.config/opencode/pivota_spec-framework/**": "allow"
+    },
+    "mcp": {
+      "*": "allow"
+    },
+    "read": {
+      "*": "allow"
+    },
+    "webfetch": "allow"
+  },
+  "provider": {
+    "anthropic": {}
+  }
+}

@@ -95,13 +95,5 @@ export const pageVariants: Variants = {
 };
 
 // ─── Reduced Motion Helper ────────────────────────────────────
-// Usage in components:
-//   const shouldReduceMotion = useReducedMotion();
-//   <motion.div
-//     variants={shouldReduceMotion ? {} : cardVariants}
-//     initial={shouldReduceMotion ? false : 'hidden'}
-//     animate="visible"
-//   />
-//
 // Re-export useReducedMotion so components import from one place
 export { useReducedMotion } from 'framer-motion';
