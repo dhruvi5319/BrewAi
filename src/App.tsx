@@ -2,18 +2,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useReducedMotion } from './lib/motion';
 import { pageVariants } from './lib/motion';
-
-// Temporary placeholder pages — replaced in Phase 2 and Phase 4
-function MenuPlaceholder() {
-  return (
-    <div className="min-h-screen bg-canvas text-primary flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="font-display text-4xl text-accent mb-4">BrewAI</h1>
-        <p className="font-body text-secondary">Menu coming in Phase 2</p>
-      </div>
-    </div>
-  );
-}
+import { MenuPage } from './pages/MenuPage';
 
 function ConfirmationPlaceholder() {
   return (
@@ -40,7 +29,7 @@ export default function App() {
         exit={shouldReduceMotion ? undefined : 'exit'}
       >
         <Routes location={location}>
-          <Route path="/" element={<MenuPlaceholder />} />
+          <Route path="/" element={<MenuPage />} />
           <Route path="/confirmation" element={<ConfirmationPlaceholder />} />
         </Routes>
       </motion.div>
