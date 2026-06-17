@@ -1,8 +1,8 @@
 {
   "generator_version": "init-dev-server@1",
   "catalog_entry": "react-vite",
-  "generated_at": "2026-06-17T16:25:26Z",
-  "inspection_inputs_hash": "fda838e7fe0f9b6bed8e6a66b4f7a3c24a90a7de81ee29431682221280e37087",
+  "generated_at": "2026-06-17T18:00:00Z",
+  "inspection_inputs_hash": "538d7ac3f6a6b3b37bc1c36f70a0a8ace90b2a79b7838f380f24d147cf02800a",
   "inspection_inputs": {
     "matched_globs": [
       "package.json",
@@ -11,6 +11,7 @@
     "manifest_signatures": [
       "package.json:dep:@fontsource/inter@^5.0.0",
       "package.json:dep:@fontsource/playfair-display@^5.0.0",
+      "package.json:dep:@playwright/test@^1.61.0",
       "package.json:dep:@types/better-sqlite3@^7.6.0",
       "package.json:dep:@types/cors@^2.8.0",
       "package.json:dep:@types/express@^4.17.0",
@@ -29,6 +30,7 @@
       "package.json:dep:react-dom@^18.3.0",
       "package.json:dep:react-router-dom@^6.26.0",
       "package.json:dep:react@^18.3.0",
+      "package.json:dep:sonner@^2.0.7",
       "package.json:dep:tailwindcss@^3.4.0",
       "package.json:dep:tsx@^4.17.0",
       "package.json:dep:typescript@^5.5.0",
