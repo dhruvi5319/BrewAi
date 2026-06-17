@@ -1,6 +1,6 @@
 import type Database from 'better-sqlite3';
 
-const ESPRESSO_OPTIONS = JSON.stringify({
+const espressoOptions = JSON.stringify({
   sizes: [
     { label: 'Small', delta: -0.50 },
     { label: 'Medium', delta: 0.00 },
@@ -18,7 +18,7 @@ const ESPRESSO_OPTIONS = JSON.stringify({
   ],
 });
 
-const COLD_BREW_OPTIONS = JSON.stringify({
+const coldBrewOptions = JSON.stringify({
   sizes: [
     { label: 'Small', delta: -0.50 },
     { label: 'Medium', delta: 0.00 },
@@ -34,7 +34,7 @@ const COLD_BREW_OPTIONS = JSON.stringify({
   ],
 });
 
-const POUR_OVER_OPTIONS = JSON.stringify({
+const pourOverOptions = JSON.stringify({
   sizes: [
     { label: '8oz', delta: 0.00 },
     { label: '12oz', delta: 0.50 },
@@ -45,7 +45,7 @@ const POUR_OVER_OPTIONS = JSON.stringify({
   extras: [],
 });
 
-const TEA_OPTIONS = JSON.stringify({
+const teaOptions = JSON.stringify({
   sizes: [
     { label: 'Small', delta: -0.50 },
     { label: 'Medium', delta: 0.00 },
@@ -60,255 +60,51 @@ const TEA_OPTIONS = JSON.stringify({
   ],
 });
 
-interface SeedItem {
-  name: string;
-  description: string;
-  base_price: number;
-  category: string;
-  drink_type: string;
-  has_customizations: number;
-  sort_order: number;
-  options_json: string;
-}
-
-const SEED_ITEMS: SeedItem[] = [
-  // Espresso (6 items)
-  {
-    name: 'Signature Latte',
-    description: 'Velvety espresso with steamed micro-foam',
-    base_price: 4.75,
-    category: 'Espresso',
-    drink_type: 'espresso',
-    has_customizations: 1,
-    sort_order: 1,
-    options_json: ESPRESSO_OPTIONS,
-  },
-  {
-    name: 'Flat White',
-    description: 'Double ristretto with silky whole milk',
-    base_price: 4.50,
-    category: 'Espresso',
-    drink_type: 'espresso',
-    has_customizations: 1,
-    sort_order: 2,
-    options_json: ESPRESSO_OPTIONS,
-  },
-  {
-    name: 'Cortado',
-    description: 'Equal parts espresso and warm milk',
-    base_price: 3.75,
-    category: 'Espresso',
-    drink_type: 'espresso',
-    has_customizations: 1,
-    sort_order: 3,
-    options_json: ESPRESSO_OPTIONS,
-  },
-  {
-    name: 'Oat Cappuccino',
-    description: 'Double shot with thick oat milk foam',
-    base_price: 5.00,
-    category: 'Espresso',
-    drink_type: 'espresso',
-    has_customizations: 1,
-    sort_order: 4,
-    options_json: ESPRESSO_OPTIONS,
-  },
-  {
-    name: 'Vanilla Bean Latte',
-    description: 'Espresso with house-made vanilla syrup and steamed milk',
-    base_price: 5.25,
-    category: 'Espresso',
-    drink_type: 'espresso',
-    has_customizations: 1,
-    sort_order: 5,
-    options_json: ESPRESSO_OPTIONS,
-  },
-  {
-    name: 'Ristretto Shot',
-    description: 'Concentrated half-shot for the purist',
-    base_price: 2.50,
-    category: 'Espresso',
-    drink_type: 'espresso',
-    has_customizations: 1,
-    sort_order: 6,
-    options_json: ESPRESSO_OPTIONS,
-  },
-
-  // Cold Brew (4 items)
-  {
-    name: 'Classic Cold Brew',
-    description: '20-hour steep, smooth and bold',
-    base_price: 4.25,
-    category: 'Cold Brew',
-    drink_type: 'cold_brew',
-    has_customizations: 1,
-    sort_order: 1,
-    options_json: COLD_BREW_OPTIONS,
-  },
-  {
-    name: 'Vanilla Cold Brew',
-    description: 'Cold brew with vanilla syrup over ice',
-    base_price: 4.75,
-    category: 'Cold Brew',
-    drink_type: 'cold_brew',
-    has_customizations: 1,
-    sort_order: 2,
-    options_json: COLD_BREW_OPTIONS,
-  },
-  {
-    name: 'Nitro Cold Brew',
-    description: 'Nitrogen-infused cold brew on tap',
-    base_price: 5.00,
-    category: 'Cold Brew',
-    drink_type: 'cold_brew',
-    has_customizations: 1,
-    sort_order: 3,
-    options_json: COLD_BREW_OPTIONS,
-  },
-  {
-    name: 'Cold Brew Tonic',
-    description: 'Cold brew over sparkling tonic water',
-    base_price: 5.50,
-    category: 'Cold Brew',
-    drink_type: 'cold_brew',
-    has_customizations: 1,
-    sort_order: 4,
-    options_json: COLD_BREW_OPTIONS,
-  },
-
-  // Pour-Over (4 items)
-  {
-    name: 'Ethiopia Yirgacheffe',
-    description: 'Bright blueberry and jasmine notes',
-    base_price: 6.00,
-    category: 'Pour-Over',
-    drink_type: 'pour_over',
-    has_customizations: 0,
-    sort_order: 1,
-    options_json: POUR_OVER_OPTIONS,
-  },
-  {
-    name: 'Colombia Huila',
-    description: 'Caramel sweetness with a clean finish',
-    base_price: 5.50,
-    category: 'Pour-Over',
-    drink_type: 'pour_over',
-    has_customizations: 0,
-    sort_order: 2,
-    options_json: POUR_OVER_OPTIONS,
-  },
-  {
-    name: 'Guatemala Antigua',
-    description: 'Dark chocolate and walnut',
-    base_price: 5.75,
-    category: 'Pour-Over',
-    drink_type: 'pour_over',
-    has_customizations: 0,
-    sort_order: 3,
-    options_json: POUR_OVER_OPTIONS,
-  },
-  {
-    name: 'Kenya AA',
-    description: 'Winey acidity with blackcurrant',
-    base_price: 6.25,
-    category: 'Pour-Over',
-    drink_type: 'pour_over',
-    has_customizations: 0,
-    sort_order: 4,
-    options_json: POUR_OVER_OPTIONS,
-  },
-
-  // Tea (4 items)
-  {
-    name: 'Matcha Latte',
-    description: 'Ceremonial grade matcha with steamed milk',
-    base_price: 5.00,
-    category: 'Tea',
-    drink_type: 'tea',
-    has_customizations: 1,
-    sort_order: 1,
-    options_json: TEA_OPTIONS,
-  },
-  {
-    name: 'Hojicha Latte',
-    description: 'Roasted green tea with a toasty finish',
-    base_price: 4.75,
-    category: 'Tea',
-    drink_type: 'tea',
-    has_customizations: 1,
-    sort_order: 2,
-    options_json: TEA_OPTIONS,
-  },
-  {
-    name: 'Earl Grey Latte',
-    description: 'London Fog style with bergamot and vanilla',
-    base_price: 4.50,
-    category: 'Tea',
-    drink_type: 'tea',
-    has_customizations: 1,
-    sort_order: 3,
-    options_json: TEA_OPTIONS,
-  },
-  {
-    name: 'Chamomile Honey',
-    description: 'Calming chamomile with local honey',
-    base_price: 3.75,
-    category: 'Tea',
-    drink_type: 'tea',
-    has_customizations: 1,
-    sort_order: 4,
-    options_json: TEA_OPTIONS,
-  },
-
-  // Seasonal (3 items)
-  {
-    name: 'Lavender Honey Latte',
-    description: 'Espresso with house lavender syrup and oat milk',
-    base_price: 5.75,
-    category: 'Seasonal',
-    drink_type: 'espresso',
-    has_customizations: 1,
-    sort_order: 1,
-    options_json: ESPRESSO_OPTIONS,
-  },
-  {
-    name: 'Cardamom Rose Latte',
-    description: 'Spiced espresso with rose water and oat foam',
-    base_price: 5.50,
-    category: 'Seasonal',
-    drink_type: 'espresso',
-    has_customizations: 1,
-    sort_order: 2,
-    options_json: ESPRESSO_OPTIONS,
-  },
-  {
-    name: 'Brown Sugar Cold Brew',
-    description: 'Cold brew with brown sugar syrup and oat milk',
-    base_price: 5.25,
-    category: 'Seasonal',
-    drink_type: 'cold_brew',
-    has_customizations: 1,
-    sort_order: 3,
-    options_json: COLD_BREW_OPTIONS,
-  },
-];
-
 export function seedMenu(db: InstanceType<typeof Database>): void {
   const count = (db.prepare('SELECT COUNT(*) as count FROM menu_items').get() as { count: number }).count;
   if (count > 0) return; // Already seeded — do not re-run
 
   const insert = db.prepare(`
-    INSERT INTO menu_items
-      (name, description, base_price, category, drink_type, has_customizations, sort_order, options_json)
-    VALUES
-      (@name, @description, @base_price, @category, @drink_type, @has_customizations, @sort_order, @options_json)
+    INSERT INTO menu_items (name, description, base_price, category, drink_type, has_customizations, available, sort_order, options_json)
+    VALUES (?, ?, ?, ?, ?, ?, 1, ?, ?)
   `);
 
-  const insertMany = db.transaction((items: SeedItem[]) => {
+  const insertMany = db.transaction((items: Array<[string, string, number, string, string, number, number, string]>) => {
     for (const item of items) {
-      insert.run(item);
+      insert.run(...item);
     }
   });
 
-  insertMany(SEED_ITEMS);
+  insertMany([
+    // Espresso (6 items)
+    ['Signature Latte', 'Velvety espresso with steamed micro-foam', 4.75, 'Espresso', 'espresso', 1, 1, espressoOptions],
+    ['Flat White', 'Double ristretto with silky whole milk', 4.50, 'Espresso', 'espresso', 1, 2, espressoOptions],
+    ['Cortado', 'Equal parts espresso and warm milk', 3.75, 'Espresso', 'espresso', 1, 3, espressoOptions],
+    ['Oat Cappuccino', 'Double shot with thick oat milk foam', 5.00, 'Espresso', 'espresso', 1, 4, espressoOptions],
+    ['Vanilla Bean Latte', 'Espresso with house-made vanilla syrup and steamed milk', 5.25, 'Espresso', 'espresso', 1, 5, espressoOptions],
+    ['Ristretto Shot', 'Concentrated half-shot for the purist', 2.50, 'Espresso', 'espresso', 1, 6, espressoOptions],
+
+    // Cold Brew (4 items)
+    ['Classic Cold Brew', '20-hour steep, smooth and bold', 4.25, 'Cold Brew', 'cold_brew', 1, 1, coldBrewOptions],
+    ['Vanilla Cold Brew', 'Cold brew with vanilla syrup over ice', 4.75, 'Cold Brew', 'cold_brew', 1, 2, coldBrewOptions],
+    ['Nitro Cold Brew', 'Nitrogen-infused cold brew on tap', 5.00, 'Cold Brew', 'cold_brew', 1, 3, coldBrewOptions],
+    ['Cold Brew Tonic', 'Cold brew over sparkling tonic water', 5.50, 'Cold Brew', 'cold_brew', 1, 4, coldBrewOptions],
+
+    // Pour-Over (4 items)
+    ['Ethiopia Yirgacheffe', 'Bright blueberry and jasmine notes', 6.00, 'Pour-Over', 'pour_over', 0, 1, pourOverOptions],
+    ['Colombia Huila', 'Caramel sweetness with a clean finish', 5.50, 'Pour-Over', 'pour_over', 0, 2, pourOverOptions],
+    ['Guatemala Antigua', 'Dark chocolate and walnut', 5.75, 'Pour-Over', 'pour_over', 0, 3, pourOverOptions],
+    ['Kenya AA', 'Winey acidity with blackcurrant', 6.25, 'Pour-Over', 'pour_over', 0, 4, pourOverOptions],
+
+    // Tea (4 items)
+    ['Matcha Latte', 'Ceremonial grade matcha with steamed milk', 5.00, 'Tea', 'tea', 1, 1, teaOptions],
+    ['Hojicha Latte', 'Roasted green tea with a toasty finish', 4.75, 'Tea', 'tea', 1, 2, teaOptions],
+    ['Earl Grey Latte', 'London Fog style with bergamot and vanilla', 4.50, 'Tea', 'tea', 1, 3, teaOptions],
+    ['Chamomile Honey', 'Calming chamomile with local honey', 3.75, 'Tea', 'tea', 1, 4, teaOptions],
+
+    // Seasonal (3 items)
+    ['Lavender Honey Latte', 'Espresso with house lavender syrup and oat milk', 5.75, 'Seasonal', 'espresso', 1, 1, espressoOptions],
+    ['Cardamom Rose Latte', 'Spiced espresso with rose water and oat foam', 5.50, 'Seasonal', 'espresso', 1, 2, espressoOptions],
+    ['Brown Sugar Cold Brew', 'Cold brew with brown sugar syrup and oat milk', 5.25, 'Seasonal', 'cold_brew', 1, 3, coldBrewOptions],
+  ]);
 }

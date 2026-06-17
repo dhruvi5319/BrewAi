@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { db } from '../db/database.js';
-import type { ApiResponse, MenuItem } from '../types/api.js';
+import type { MenuItem } from '../types/api.js';
 
 export const menuRouter = Router();
 
@@ -34,67 +34,43 @@ function rowToMenuItem(row: MenuItemRow): MenuItem {
   };
 }
 
+// GET /api/menu/categories — MUST be registered BEFORE /:id to avoid Express matching 'categories' as an id
+menuRouter.get('/categories', (_req: Request, res: Response) => {
+  try {
+    const rows = db.prepare(
+      'SELECT DISTINCT category FROM menu_items WHERE available = 1 ORDER BY category'
+    ).all() as Array<{ category: string }>;
+    const categories = rows.map((r) => r.category);
+    res.status(200).json({ data: categories, error: null, status: 200 });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    res.status(500).json({ data: null, error: { code: 'DB_READ_ERROR', message }, status: 500 });
+  }
+});
+
 // GET /api/menu
-menuRouter.get('/', (req: Request, res: Response) => {
+menuRouter.get('/', (_req: Request, res: Response) => {
   try {
     const rows = db.prepare(
       'SELECT * FROM menu_items WHERE available = 1 ORDER BY category, sort_order, name'
     ).all() as MenuItemRow[];
-
     const items: MenuItem[] = rows.map(rowToMenuItem);
-
-    const response: ApiResponse<MenuItem[]> = {
-      data: items,
-      error: null,
-      status: 200,
-    };
-    res.status(200).json(response);
+    res.status(200).json({ data: items, error: null, status: 200 });
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Database read failed';
-    res.status(500).json({
-      data: null,
-      error: { code: 'DB_READ_ERROR', message },
-      status: 500,
-    });
-  }
-});
-
-// GET /api/menu/categories — MUST be registered BEFORE /api/menu/:id
-menuRouter.get('/categories', (req: Request, res: Response) => {
-  try {
-    const rows = db.prepare(
-      'SELECT DISTINCT category FROM menu_items WHERE available = 1 ORDER BY category'
-    ).all() as { category: string }[];
-
-    const categories = rows.map((r) => r.category);
-
-    const response: ApiResponse<string[]> = {
-      data: categories,
-      error: null,
-      status: 200,
-    };
-    res.status(200).json(response);
-  } catch (err) {
-    const message = err instanceof Error ? err.message : 'Database read failed';
-    res.status(500).json({
-      data: null,
-      error: { code: 'DB_READ_ERROR', message },
-      status: 500,
-    });
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    res.status(500).json({ data: null, error: { code: 'DB_READ_ERROR', message }, status: 500 });
   }
 });
 
 // GET /api/menu/:id
 menuRouter.get('/:id', (req: Request, res: Response) => {
-  const id = parseInt(req.params.id, 10);
-
+  const id = parseInt(req.params['id'] ?? '', 10);
   if (!Number.isInteger(id) || id <= 0) {
-    res.status(400).json({
+    return res.status(400).json({
       data: null,
       error: { code: 'INVALID_ID', message: 'Invalid ID' },
       status: 400,
     });
-    return;
   }
 
   try {
@@ -103,27 +79,16 @@ menuRouter.get('/:id', (req: Request, res: Response) => {
     ).get(id) as MenuItemRow | undefined;
 
     if (!row) {
-      res.status(404).json({
+      return res.status(404).json({
         data: null,
         error: { code: 'ITEM_NOT_FOUND', message: 'Item not found' },
         status: 404,
       });
-      return;
     }
 
-    const item = rowToMenuItem(row);
-    const response: ApiResponse<MenuItem> = {
-      data: item,
-      error: null,
-      status: 200,
-    };
-    res.status(200).json(response);
+    return res.status(200).json({ data: rowToMenuItem(row), error: null, status: 200 });
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Database read failed';
-    res.status(500).json({
-      data: null,
-      error: { code: 'DB_READ_ERROR', message },
-      status: 500,
-    });
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    return res.status(500).json({ data: null, error: { code: 'DB_READ_ERROR', message }, status: 500 });
   }
 });

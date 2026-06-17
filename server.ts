@@ -11,13 +11,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = parseInt(process.env.PORT ?? '3000', 10);
-const HOST = process.env.HOST ?? '0.0.0.0';
+const PORT = parseInt(process.env['PORT'] ?? '3000', 10);
+const HOST = process.env['HOST'] ?? '0.0.0.0';
 
-// Middleware chain (from TechArch §2.1):
-// cors() → express.json() → API routes → static(dist/) → SPA fallback → errorHandler
+// Middleware chain: cors() → express.json() → API routes → static(dist/) → SPA fallback → errorHandler
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? false : 'http://localhost:5173',
+  origin: process.env['NODE_ENV'] === 'production' ? false : 'http://localhost:5173',
 }));
 app.use(express.json());
 
@@ -25,8 +24,8 @@ app.use(express.json());
 app.use('/api/menu', menuRouter);
 app.use('/api/orders', ordersRouter);
 
-// Unknown API routes — return JSON 404 (before static/SPA middleware)
-app.use('/api/*', (req: Request, res: Response) => {
+// Unknown API routes — return JSON 404 (before SPA fallback for /api/* paths)
+app.use('/api', (_req: Request, res: Response) => {
   res.status(404).json({
     data: null,
     error: { code: 'NOT_FOUND', message: 'Route not found' },
@@ -38,7 +37,7 @@ app.use('/api/*', (req: Request, res: Response) => {
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // SPA fallback — all non-API routes serve index.html
-app.get('*', (req: Request, res: Response) => {
+app.get('*', (_req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
