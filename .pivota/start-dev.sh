@@ -109,6 +109,25 @@ if (( BASH_VERSINFO[0] < 4 )) || { (( BASH_VERSINFO[0] == 4 )) && (( BASH_VERSIN
   exit 127
 fi
 
+# === Port cleanup: kill any lingering process on port 3000 before binding ===
+# Prevents EADDRINUSE when the script is restarted with a previous instance's
+# TIME_WAIT socket or a stale backend still running.
+_free_port() {
+  local port="$1"
+  local pid
+  pid=$(grep ":$(printf '%04X' "$port") " /proc/net/tcp6 /proc/net/tcp 2>/dev/null \
+    | awk '$4 == "0A" {print $10}' \
+    | head -1)
+  if [[ -n "$pid" ]]; then
+    echo "[pivota] killing existing listener on port $port (inode-based; checking pids)"
+  fi
+  # Kill any tsx/node process that might hold port 3000
+  pkill -f "tsx server" 2>/dev/null || true
+  pkill -f "node.*server" 2>/dev/null || true
+  sleep 1
+}
+_free_port 3000
+
 # === Multi-process: Express backend + Vite frontend ===
 shutdown() {
   echo "[pivota] shutting down children"
@@ -131,10 +150,12 @@ declare -a PIDS=()
 PIDS+=($!)
 
 # Process 2: Vite frontend on port 5173, bound to 0.0.0.0 with allowedHosts overlay
+# NOTE: Run vite directly (not via 'npm run dev') to avoid invoking concurrently
+# which would launch a second tsx server.ts and conflict with Process 1 on port 3000.
 (
   cd '.' \
     && : \
-    && exec bash -c 'npm run dev -- --config vite.config.pivota.ts --host 0.0.0.0 --strictPort 2>/dev/null || npm run dev -- --host 0.0.0.0 --strictPort'
+    && exec bash -c 'npx vite --config vite.config.pivota.ts --host 0.0.0.0 --strictPort 2>/dev/null || npx vite --host 0.0.0.0 --strictPort'
 ) 2>&1 | sed 's/^/[frontend] /' &
 PIDS+=($!)
 

@@ -1,6 +1,7 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { initDatabase } from './server/db/database.js';
 import { menuRouter } from './server/routes/menu.js';
@@ -13,10 +14,12 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = parseInt(process.env['PORT'] ?? '3000', 10);
 const HOST = process.env['HOST'] ?? '0.0.0.0';
+const DIST_DIR = path.join(__dirname, 'dist');
+const INDEX_HTML = path.join(DIST_DIR, 'index.html');
 
 // Middleware chain: cors() → express.json() → API routes → static(dist/) → SPA fallback → errorHandler
 app.use(cors({
-  origin: process.env['NODE_ENV'] === 'production' ? false : 'http://localhost:5173',
+  origin: process.env['NODE_ENV'] === 'production' ? false : true,
 }));
 app.use(express.json());
 
@@ -33,13 +36,24 @@ app.use('/api', (_req: Request, res: Response) => {
   });
 });
 
-// Serve Vite production build
-app.use(express.static(path.join(__dirname, 'dist')));
+// Serve Vite production build (only if dist exists)
+if (fs.existsSync(DIST_DIR)) {
+  app.use(express.static(DIST_DIR));
 
-// SPA fallback — all non-API routes serve index.html
-app.get('*', (_req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
+  // SPA fallback — all non-API routes serve index.html
+  app.get('*', (_req: Request, res: Response, next: NextFunction) => {
+    if (fs.existsSync(INDEX_HTML)) {
+      res.sendFile(INDEX_HTML);
+    } else {
+      next();
+    }
+  });
+} else {
+  // Dev mode: no dist build — frontend is served by Vite on port 5173
+  app.get('/', (_req: Request, res: Response) => {
+    res.json({ status: 'ok', message: 'BrewAI API — frontend served by Vite dev server on port 5173' });
+  });
+}
 
 // Global error handler (must be last)
 app.use(errorHandler);
