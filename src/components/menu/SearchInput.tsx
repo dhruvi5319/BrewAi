@@ -41,7 +41,7 @@ export function SearchInput({ value, onChange, placeholder }: SearchInputProps) 
   };
 
   return (
-    <div className="relative">
+    <div className="relative min-h-[44px]">
       <Search
         size={16}
         className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none"

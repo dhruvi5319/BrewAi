@@ -34,3 +34,18 @@
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-canvas;
   }
 }
+
+/* ─── Overflow guard — prevents horizontal scroll at any viewport ─── */
+/* Duplicated outside @layer for safety so it is never purged by Tailwind JIT */
+html, body {
+  overflow-x: hidden;
+}
+
+/* ─── Touch target minimum — safety net for audit compliance ─── */
+/* Individual components enforce min-h-[44px] via Tailwind; this is a global fallback */
+@media (pointer: coarse) {
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
