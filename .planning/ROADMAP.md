@@ -78,7 +78,7 @@ Plans:
 - [ ] 03-04-PLAN.md — App wiring: MenuPage + Navigation + Toaster + Playwright e2e tests (Wave 3, depends on 03-02 + 03-03)
 
 ### Phase 4: Order Placement
-**Status**: executing
+**Status**: passed
 **Goal**: A customer can submit their cart as an order, see a loading state during submission, and land on a confirmation screen showing their order reference number and itemized summary
 **Depends on**: Phase 3
 **Requirements**: F4-01, F4-02, F4-03, F4-04, F4-05, F4-06, F4-07, F4-08
