@@ -138,6 +138,16 @@ None - no external service configuration required.
 - The verify phase should test: CartDrawer opens/closes with animation on both mobile (<768px) and desktop (≥768px), CustomizationModal shows as bottom sheet on mobile and centered dialog on desktop, CartBadge pops when item is added to cart
 - All animations respect prefers-reduced-motion via useReducedMotion()
 
+## Self-Check: PASSED
+
+- FOUND: src/components/cart/CartDrawer.tsx
+- FOUND: src/components/cart/CartBadge.tsx
+- FOUND: src/components/customization/CustomizationModal.tsx
+- FOUND: src/lib/motion.ts
+- FOUND: .planning/phases/05-polish/05-02-SUMMARY.md
+- FOUND commit: 6eb2b9d (feat(05-02): CartDrawer)
+- FOUND commit: f22e8ba (feat(05-02): CustomizationModal + CartBadge)
+
 ---
 *Phase: 05-polish*
 *Completed: 2026-07-01*
