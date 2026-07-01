@@ -20,8 +20,9 @@
 #     can disambiguate failures from the wrapper.
 #   - Multi-process (bash trap + wait -n) used because this project runs both
 #     a Vite frontend (port 5173) and an Express/tsx backend (port 3000) that
-#     Vite proxies. concurrently (the project's npm dev script) is replaced with
-#     the framework-canonical supervision pattern (catalog/README.md anti-pattern 2).
+#     Vite proxies. The project's npm dev script uses `concurrently` — replaced
+#     here with the framework-canonical supervision pattern per
+#     catalog/README.md anti-pattern 2 and multi-process-template.md.
 
 set -euo pipefail
 
@@ -34,25 +35,28 @@ if (( BASH_VERSINFO[0] < 4 )) || { (( BASH_VERSINFO[0] == 4 )) && (( BASH_VERSIN
 fi
 
 # === D-11.4: tee stdout/stderr to /tmp/pivota-dev.log AND pass through ===
+# Researcher resolved log destination: /tmp/pivota-dev.log (always writable,
+# matches existing convention). SSE chat panel sees output live AND a file
+# exists for scrollback / replay.
 mkdir -p /tmp
 exec > >(tee -a /tmp/pivota-dev.log) 2>&1
 echo "[pivota] $(date -Iseconds) start-dev.sh begin (catalog: react-vite)"
 
 # === D-11.1 + D-11.2: per-stack 0.0.0.0 binding + host allowlist relaxation ===
-export HOST=0.0.0.0
-# NOTE: Vite does NOT honor HOST as a server bind var; it is set here only for
-# downstream tooling that may read it (Next-style apps importing utilities,
-# scripts that branch on $HOST, etc.).
-# The actual Vite bind comes from the --host 0.0.0.0 CLI flag in the per-process cmd.
-#
+# NOTE: Vite does NOT honor HOST as a server bind var; set here for downstream
+# tooling only. The actual Vite bind comes from --host 0.0.0.0 CLI flag.
 # VITE_HOST and VITE_ALLOWED_HOSTS do NOT exist as Vite env vars
 # (CITED: github.com/vitejs/vite issue #19273, vite.dev/config/server-options).
 # This is the RESEARCH.md Pitfall 1 trap — the CLI flag is canonical.
-#
+export HOST=0.0.0.0
 # Express backend port (must match vite.config.ts proxy target of port 3000).
 export PORT="${PORT:-3000}"
 
 # === D-11.3: .env.example -> .env seed (platform-injection-safe) ===
+# Seed .env from .env.example for first boot, but NEVER let an .env.example
+# placeholder shadow a variable the platform already injected into the sandbox
+# environment. Any KEY already set in the environment is dropped from the copy.
+# See references/runtime-environment.md §3.
 if [[ ! -f .env && -f .env.example ]]; then
   echo "[pivota] seeding .env from .env.example (preserving platform-injected vars)"
   while IFS= read -r line || [[ -n "$line" ]]; do
@@ -70,6 +74,8 @@ if [[ ! -f .env && -f .env.example ]]; then
 fi
 
 # === Pre-exec snippet: write vite.config.pivota.ts overlay (allowedHosts) ===
+# Write a sidecar ONLY if the user's vite.config.ts does not already set
+# server.allowedHosts. Leaves the user's file untouched per react-vite catalog entry.
 if [[ -f vite.config.ts && ! -f vite.config.pivota.ts ]]; then
   if ! grep -q "allowedHosts" vite.config.ts 2>/dev/null; then
     cat > vite.config.pivota.ts <<'VITE_EOF'
@@ -102,6 +108,9 @@ if [[ -n "$LOCK_FILE_PATH" && -f "$LOCK_FILE_PATH" ]]; then
   CURRENT_HASH=$(sha256sum "$LOCK_FILE_PATH" | cut -d' ' -f1)
   PREVIOUS_HASH=$(cat "$SENTINEL" 2>/dev/null || echo "")
 
+  # RESEARCH.md Pitfall 6: lockfile-unchanged is necessary but not sufficient —
+  # the install-output directory must also exist (sentinel survives but
+  # node_modules may not on a fresh sandbox tmpfs).
   PRESENCE_OK=1
   if [[ -n "$INSTALL_PRESENCE_CHECK" && ! -e "$INSTALL_PRESENCE_CHECK" ]]; then
     PRESENCE_OK=0
@@ -119,6 +128,7 @@ if [[ -n "$LOCK_FILE_PATH" && -f "$LOCK_FILE_PATH" ]]; then
     echo "$CURRENT_HASH" > "$SENTINEL"
   fi
 elif [[ -n "$INSTALL_CMD" ]]; then
+  # No lockfile to compare; honor any sentinel mismatch by running install once per sandbox.
   if [[ ! -f "$SENTINEL" ]]; then
     run_install
     touch "$SENTINEL"
@@ -126,9 +136,17 @@ elif [[ -n "$INSTALL_CMD" ]]; then
 fi
 
 # === Multi-process supervision: Vite frontend + Express/tsx backend ===
-# bash trap + wait -n per multi-process-template.md (NEVER concurrently/pm2/supervisord).
-# The project's npm run dev uses `concurrently` — replaced here with the framework-
-# canonical pattern so signal handling and sandbox teardown work correctly.
+# This project's npm run dev uses `concurrently "tsx server.ts" "vite"`.
+# Replaced with bash trap + wait -n per multi-process-template.md.
+# (NEVER concurrently / pm2 / supervisord — catalog/README.md anti-pattern 2.)
+# The Vite dev server (port 5173) proxies /api/* to the Express backend (port 3000)
+# per vite.config.ts server.proxy. Both processes must run for the app to work.
+
+# Defense-in-depth bash version guard for wait -n (multi-process-template.md §0).
+if (( BASH_VERSINFO[0] < 4 )) || { (( BASH_VERSINFO[0] == 4 )) && (( BASH_VERSINFO[1] < 3 )); }; then
+  echo "[pivota] multi-process block requires bash 4.3+ for wait -n; found ${BASH_VERSION}" >&2
+  exit 127
+fi
 
 shutdown() {
   echo "[pivota] shutting down children"
@@ -142,7 +160,7 @@ trap shutdown SIGTERM SIGINT EXIT
 
 declare -a PIDS=()
 
-# Process 1: Express/tsx backend (port 3000 — Vite proxy target)
+# Process 1: Express/tsx backend on port 3000 (Vite proxy target)
 (
   cd '.' \
     && export PORT="${PORT:-3000}" \
@@ -150,7 +168,8 @@ declare -a PIDS=()
 ) 2>&1 | sed 's/^/[backend] /' &
 PIDS+=($!)
 
-# Process 2: Vite frontend (port 5173 — with allowedHosts overlay)
+# Process 2: Vite frontend on port 5173 (react-vite catalog exec command)
+# Attempts overlay config first; falls back to direct --host flag per catalog entry.
 (
   cd '.' \
     && export HOST=0.0.0.0 \
