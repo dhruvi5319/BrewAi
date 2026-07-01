@@ -1,41 +1,15 @@
 {
   "generator_version": "init-dev-server@1",
   "catalog_entry": "react-vite",
-  "generated_at": "2026-06-17T18:00:00Z",
-  "inspection_inputs_hash": "538d7ac3f6a6b3b37bc1c36f70a0a8ace90b2a79b7838f380f24d147cf02800a",
+  "generated_at": "2026-07-01T02:00:11Z",
+  "inspection_inputs_hash": "f3f85c52b18910444ee2b5e281a34efb1b68f0b91bc08735b01513bd6319f373",
   "inspection_inputs": {
     "matched_globs": [
       "package.json",
       "vite.config.ts"
     ],
     "manifest_signatures": [
-      "package.json:dep:@fontsource/inter@^5.0.0",
-      "package.json:dep:@fontsource/playfair-display@^5.0.0",
-      "package.json:dep:@playwright/test@^1.61.0",
-      "package.json:dep:@types/better-sqlite3@^7.6.0",
-      "package.json:dep:@types/cors@^2.8.0",
-      "package.json:dep:@types/express@^4.17.0",
-      "package.json:dep:@types/node@^20.16.0",
-      "package.json:dep:@types/react-dom@^18.3.0",
-      "package.json:dep:@types/react@^18.3.0",
-      "package.json:dep:@vitejs/plugin-react@^4.3.0",
-      "package.json:dep:autoprefixer@^10.4.0",
-      "package.json:dep:better-sqlite3@^12.11.1",
-      "package.json:dep:concurrently@^8.2.0",
-      "package.json:dep:cors@^2.8.5",
-      "package.json:dep:express@^4.19.0",
-      "package.json:dep:framer-motion@^11.3.0",
-      "package.json:dep:lucide-react@^0.427.0",
-      "package.json:dep:postcss@^8.4.0",
-      "package.json:dep:react-dom@^18.3.0",
-      "package.json:dep:react-router-dom@^6.26.0",
-      "package.json:dep:react@^18.3.0",
-      "package.json:dep:sonner@^2.0.7",
-      "package.json:dep:tailwindcss@^3.4.0",
-      "package.json:dep:tsx@^4.17.0",
-      "package.json:dep:typescript@^5.5.0",
       "package.json:dep:vite@^5.4.0",
-      "package.json:dep:zustand@^4.5.0",
       "package.json:dev-script:concurrently \"tsx server.ts\" \"vite\""
     ],
     "existing_scripts": []
