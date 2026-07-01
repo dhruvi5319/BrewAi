@@ -1,11 +1,17 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCartStore } from '../../stores/cartStore';
 import { CartItem } from './CartItem';
-import { Button } from '../ui/index';
+import { Button, Spinner } from '../ui/index';
+import { api } from '../../lib/api';
+import type { OrderPayload, OrderLineItem } from '../../types/index';
 
 export function CartDrawer() {
   const { items, subtotal, isOpen, clearCart, closeCart } = useCartStore();
   const [confirmClear, setConfirmClear] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [orderError, setOrderError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   // Close on Escape key
   useEffect(() => {
@@ -28,6 +34,58 @@ export function CartDrawer() {
       document.body.style.overflow = '';
     };
   }, [isOpen]);
+
+  const handlePlaceOrder = async () => {
+    if (items.length === 0 || isSubmitting) return;
+    setIsSubmitting(true);
+    setOrderError(null);
+
+    // Build OrderPayload from cartStore.items
+    const payload: OrderPayload = {
+      items: items.map((item): OrderLineItem => ({
+        menuItemId: item.menuItemId,
+        name: item.name,
+        unitPrice: item.unitPrice,
+        quantity: item.quantity,
+        customizations: {
+          size: item.customizations.size,
+          milk: item.customizations.milk,
+          temperature: item.customizations.temperature,
+          shots: item.customizations.shots,
+          addons: item.customizations.addons,
+          specialInstructions: item.customizations.specialInstructions,
+        },
+      })),
+      subtotal,
+      notes: '',  // Always "" in v1 per FRD and constraints
+    };
+
+    try {
+      const response = await api.createOrder(payload);
+      if (response.error || !response.data) {
+        // Server returned an error response
+        const code = response.error?.code;
+        if (code === 'EMPTY_ORDER') {
+          setOrderError('Your cart is empty.');
+        } else if (code === 'INVALID_PAYLOAD') {
+          setOrderError('Invalid order data. Please refresh and try again.');
+        } else {
+          setOrderError('Something went wrong placing your order. Please try again.');
+        }
+        setIsSubmitting(false);
+        return;
+      }
+      // SUCCESS: only now clear cart and navigate
+      clearCart();
+      closeCart();
+      navigate('/confirmation', { state: { order: response.data } });
+    } catch {
+      // Network failure — no response at all
+      setOrderError('Could not reach the server. Check your connection and try again.');
+      setIsSubmitting(false);
+    }
+    // Note: do NOT setIsSubmitting(false) on success — component unmounts on navigation
+  };
 
   return (
     <>
@@ -120,17 +178,36 @@ export function CartDrawer() {
             <span className="text-secondary">Subtotal</span>
             <span className="text-primary font-semibold">${subtotal.toFixed(2)}</span>
           </div>
-          <Button
-            variant="primary"
-            disabled={items.length === 0}
-            aria-disabled={items.length === 0 ? true : undefined}
-            onClick={() => {
-              // TODO Phase 4: submit order
-            }}
-            className="w-full"
+          <button
+            onClick={handlePlaceOrder}
+            disabled={items.length === 0 || isSubmitting}
+            aria-busy={isSubmitting}
+            aria-disabled={items.length === 0}
+            className={`w-full flex items-center justify-center gap-2 rounded-card px-4 py-3 font-semibold text-canvas transition-all
+              bg-accent hover:bg-accent-hover focus-visible:ring-2 focus-visible:ring-accent
+              disabled:opacity-75 disabled:cursor-not-allowed min-h-[44px]`}
           >
-            Place Order
-          </Button>
+            {isSubmitting ? (
+              <>
+                <Spinner size="sm" />
+                <span>Placing order…</span>
+              </>
+            ) : (
+              'Place Order'
+            )}
+          </button>
+          {orderError && (
+            <div className="mt-2 space-y-2">
+              <p className="text-sm text-error">{orderError}</p>
+              <button
+                onClick={handlePlaceOrder}
+                disabled={isSubmitting}
+                className="text-sm underline text-accent hover:text-accent-hover focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                Try Again
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>
