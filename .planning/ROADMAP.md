@@ -59,7 +59,7 @@ Plans:
 - [x] 02-03-PLAN.md — MenuPage assembly + Playwright e2e tests (Wave 2, depends on 02-01 + 02-02)
 
 ### Phase 3: Customization & Cart
-**Status**: executing
+**Status**: awaiting verify
 **Goal**: A customer can open a customization modal for any drink, configure all applicable options with real-time price feedback, add it to their cart, and manage cart contents before checking out
 **Depends on**: Phase 2
 **Requirements**: F2-01, F2-02, F2-03, F2-04, F2-05, F2-06, F2-07, F2-08, F2-09, F2-10, F3-01, F3-02, F3-03, F3-04, F3-05, F3-06, F3-07, F3-08, F3-09
