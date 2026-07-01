@@ -78,8 +78,8 @@ if [[ ! -f .env && -f .env.example ]]; then
 fi
 
 # === Optional pre-exec snippet (JDK install, rustup, golang one-shot setup) ===
-# Catalog entries with PRE_EXEC_SNIPPET inject heavyweight one-time installs
-# here. Empty string when not needed.
+# Write vite.config.pivota.ts sidecar ONLY IF not already present and user's
+# vite.config.ts does not already set allowedHosts.
 if [[ -f vite.config.ts && ! -f vite.config.pivota.ts ]]; then
   if ! grep -q "allowedHosts" vite.config.ts 2>/dev/null; then
     cat > vite.config.pivota.ts <<'EOF'
@@ -143,6 +143,8 @@ fi
 # Final-attempt exit code propagates the INNER command's exit code, not a
 # fixed 1, so the caller (platform / Daytona) can distinguish "wrapper bug"
 # from "user command failed with N".
+# This project's npm run dev starts both the Express backend (port 3000) and
+# Vite frontend (port 5173) via the project's own concurrently invocation.
 EXEC_CMD='npm run dev -- --config vite.config.pivota.ts --host 0.0.0.0 --strictPort 2>/dev/null || npm run dev -- --host 0.0.0.0 --strictPort'
 ATTEMPT=1
 DELAY=1
