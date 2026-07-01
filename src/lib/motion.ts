@@ -79,6 +79,14 @@ export const toastVariants: Variants = {
   exit:    { opacity: 0, y: 10, scale: 0.95, transition: { duration: 0.15 } },
 };
 
+// ─── Cart Item Exit Variant ───────────────────────────────────
+
+export const cartItemExitVariants: Variants = {
+  hidden:  { opacity: 0 },
+  visible: { opacity: 1 },
+  exit:    { x: '-100%', opacity: 0, transition: { duration: 0.2, ease: 'easeIn' } },
+};
+
 // ─── Badge Pop Variant ────────────────────────────────────────
 
 export const badgePopVariants: Variants = {
