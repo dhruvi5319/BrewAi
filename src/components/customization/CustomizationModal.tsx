@@ -1,47 +1,44 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useId, useRef, useCallback } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
-import { Modal, Button } from '../ui/index';
+import { Button } from '../ui/index';
+import { modalVariants, drawerVariantsBottom, backdropVariants, useReducedMotion } from '../../lib/motion';
 import { useCartStore } from '../../stores/cartStore';
 import type { MenuItem, CartItem } from '../../types/index';
 
-interface CustomizationModalProps {
-  item: MenuItem | null;
-  isOpen: boolean;
-  onClose: () => void;
+// ─── Focus trap helper ────────────────────────────────────────
+
+function getFocusableElements(container: HTMLElement): HTMLElement[] {
+  return Array.from(
+    container.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )
+  );
 }
 
-export function CustomizationModal({ item, isOpen, onClose }: CustomizationModalProps) {
-  const [selectedSize, setSelectedSize] = useState<string>('');
-  const [selectedMilk, setSelectedMilk] = useState<string>('');
-  const [selectedTemp, setSelectedTemp] = useState<string>('');
+// ─── ModalContent ─────────────────────────────────────────────
+
+interface ModalContentProps {
+  item: MenuItem;
+  onClose: () => void;
+  titleId: string;
+  modalRef?: React.Ref<HTMLDivElement>;
+  onKeyDown?: (e: React.KeyboardEvent) => void;
+}
+
+function ModalContent({ item, onClose, titleId, modalRef, onKeyDown }: ModalContentProps) {
+  const [selectedSize, setSelectedSize] = useState<string>(() => {
+    const med = item.options.sizes.find((s) => s.label === 'Medium');
+    return med ? 'Medium' : (item.options.sizes[0]?.label ?? '');
+  });
+  const [selectedMilk, setSelectedMilk] = useState<string>(item.options.milks[0] ?? '');
+  const [selectedTemp, setSelectedTemp] = useState<string>(item.options.temperatures[0] ?? '');
   const [selectedShots, setSelectedShots] = useState<string>('Double');
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
   const [specialInstructions, setSpecialInstructions] = useState<string>('');
   const [quantity, setQuantity] = useState<number>(1);
 
   const addItem = useCartStore((state) => state.addItem);
-
-  // Reset all selections to defaults when item changes
-  useEffect(() => {
-    if (!item) return;
-    const mediumSize = item.options.sizes.find((s) => s.label === 'Medium');
-    setSelectedSize(mediumSize ? 'Medium' : (item.options.sizes[0]?.label ?? ''));
-    setSelectedMilk(item.options.milks[0] ?? '');
-    setSelectedTemp(item.options.temperatures[0] ?? '');
-    setSelectedShots('Double');
-    setSelectedAddons([]);
-    setSpecialInstructions('');
-    setQuantity(1);
-  }, [item]);
-
-  // Guard: avoid null errors when computing price
-  if (!item) {
-    return (
-      <Modal isOpen={isOpen} onClose={onClose} title="" size="lg">
-        {null}
-      </Modal>
-    );
-  }
 
   // Real-time price calculation
   const sizeOption = item.options.sizes.find((s) => s.label === selectedSize);
@@ -81,8 +78,41 @@ export function CustomizationModal({ item, isOpen, onClose }: CustomizationModal
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={item.name} size="lg">
-      <div className="space-y-6">
+    <div ref={modalRef} onKeyDown={onKeyDown}>
+      {/* Modal header */}
+      <div className="flex items-center justify-between p-6 border-b border-border">
+        <h2 id={titleId} className="font-display text-xl font-semibold text-primary">
+          {item.name}
+        </h2>
+        <button
+          onClick={onClose}
+          aria-label="Close dialog"
+          className={[
+            'flex items-center justify-center h-8 w-8 rounded-input text-secondary',
+            'hover:text-primary hover:bg-surface transition-colors duration-150',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-raised',
+          ].join(' ')}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Modal body */}
+      <div className="p-6 space-y-6">
 
         {/* 1. Size selector — always shown if sizes.length > 0 */}
         {item.options.sizes.length > 0 && (
@@ -352,6 +382,118 @@ export function CustomizationModal({ item, isOpen, onClose }: CustomizationModal
           </Button>
         </div>
       </div>
-    </Modal>
+    </div>
+  );
+}
+
+// ─── CustomizationModal ───────────────────────────────────────
+
+interface CustomizationModalProps {
+  item: MenuItem | null;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export function CustomizationModal({ item, isOpen, onClose }: CustomizationModalProps) {
+  const shouldReduceMotion = useReducedMotion();
+  const titleId = useId();
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  // Escape key handler
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
+  // Focus first element when modal opens
+  useEffect(() => {
+    if (!isOpen || !modalRef.current) return;
+    const focusable = getFocusableElements(modalRef.current);
+    if (focusable.length > 0) {
+      requestAnimationFrame(() => focusable[0].focus());
+    }
+  }, [isOpen]);
+
+  // Focus trap — Tab/Shift+Tab cycles within modal
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key !== 'Tab' || !modalRef.current) return;
+    const focusable = getFocusableElements(modalRef.current);
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else {
+      if (document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }, []);
+
+  const contentVariants = shouldReduceMotion ? {} : modalVariants;
+  const mobileVariants = shouldReduceMotion ? {} : drawerVariantsBottom;
+  const bkdropVariants = shouldReduceMotion ? {} : backdropVariants;
+
+  return (
+    <AnimatePresence>
+      {isOpen && item && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            className="fixed inset-0 bg-canvas/80 backdrop-blur-sm z-50"
+            variants={bkdropVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            onClick={onClose}
+            aria-hidden="true"
+          />
+
+          {/* Mobile bottom sheet (shown below md, hidden at md+) */}
+          <motion.div
+            className="md:hidden fixed bottom-0 left-0 right-0 max-h-[90vh] overflow-y-auto bg-surface-raised rounded-t-2xl z-50"
+            variants={mobileVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={titleId}
+          >
+            <ModalContent item={item} onClose={onClose} titleId={titleId} />
+          </motion.div>
+
+          {/* Desktop centered dialog (hidden below md, shown at md+) */}
+          <div className="hidden md:flex fixed inset-0 items-center justify-center z-50 px-4">
+            <motion.div
+              className="relative bg-surface-raised rounded-xl max-w-[600px] w-full max-h-[90vh] overflow-y-auto"
+              variants={contentVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={titleId}
+            >
+              <ModalContent
+                item={item}
+                onClose={onClose}
+                titleId={titleId}
+                modalRef={modalRef}
+                onKeyDown={handleKeyDown}
+              />
+            </motion.div>
+          </div>
+        </>
+      )}
+    </AnimatePresence>
   );
 }
