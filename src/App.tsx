@@ -4,15 +4,14 @@ import { useReducedMotion } from './lib/motion';
 import { pageVariants } from './lib/motion';
 import { MenuPage } from './pages/MenuPage';
 import { ConfirmationPage } from './pages/ConfirmationPage';
-import { Navigation } from './components/layout/Navigation';
+import { Layout } from './components/layout/Layout';
 
 export default function App() {
   const location = useLocation();
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <>
-      <Navigation />
+    <Layout>
       <AnimatePresence mode="wait">
         <motion.div
           key={location.pathname}
@@ -27,6 +26,6 @@ export default function App() {
           </Routes>
         </motion.div>
       </AnimatePresence>
-    </>
+    </Layout>
   );
 }

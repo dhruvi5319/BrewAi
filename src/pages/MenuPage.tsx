@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useMenuStore } from '../stores/menuStore';
 import { CategoryFilter } from '../components/menu/CategoryFilter';
 import { SearchInput } from '../components/menu/SearchInput';
@@ -8,6 +9,7 @@ import { CustomizationModal } from '../components/customization/CustomizationMod
 import { useCartStore } from '../stores/cartStore';
 import { toast } from 'sonner';
 import type { MenuItem } from '../types/index';
+import { staggerContainer, useReducedMotion } from '../lib/motion';
 
 export function MenuPage() {
   const {
@@ -26,6 +28,7 @@ export function MenuPage() {
   const [modalItem, setModalItem] = useState<MenuItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { addItem } = useCartStore();
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     fetchMenu();
@@ -60,7 +63,7 @@ export function MenuPage() {
   };
 
   return (
-    <main className="max-w-6xl mx-auto px-4 py-8">
+    <main className="max-w-7xl mx-auto px-4 py-8">
       {/* Header area */}
       <div className="mb-6">
         <h1 className="font-display text-3xl font-bold text-primary mb-2">Our Menu</h1>
@@ -110,16 +113,24 @@ export function MenuPage() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredItems.map((item) => (
-            <ProductCard
-              key={item.id}
-              item={item}
-              onCustomize={handleCustomize}
-              onAddToCart={handleAddToCart}
-            />
-          ))}
-        </div>
+        <AnimatePresence mode="popLayout">
+          <motion.div
+            key={activeCategory + searchQuery}
+            variants={shouldReduceMotion ? {} : staggerContainer}
+            initial={shouldReduceMotion ? false : 'hidden'}
+            animate="visible"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4"
+          >
+            {filteredItems.map((item) => (
+              <ProductCard
+                key={item.id}
+                item={item}
+                onCustomize={handleCustomize}
+                onAddToCart={handleAddToCart}
+              />
+            ))}
+          </motion.div>
+        </AnimatePresence>
       )}
 
       <CustomizationModal
