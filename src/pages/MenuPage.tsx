@@ -1,10 +1,13 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useMenuStore } from '../stores/menuStore';
 import { CategoryFilter } from '../components/menu/CategoryFilter';
 import { SearchInput } from '../components/menu/SearchInput';
 import { ProductCard } from '../components/menu/ProductCard';
 import { SkeletonGrid } from '../components/menu/SkeletonGrid';
-import { MenuItem } from '../types/index';
+import { CustomizationModal } from '../components/customization/CustomizationModal';
+import { useCartStore } from '../stores/cartStore';
+import { toast } from 'sonner';
+import type { MenuItem } from '../types/index';
 
 export function MenuPage() {
   const {
@@ -20,18 +23,40 @@ export function MenuPage() {
     clearFilters,
   } = useMenuStore();
 
+  const [modalItem, setModalItem] = useState<MenuItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { addItem } = useCartStore();
+
   useEffect(() => {
     fetchMenu();
   }, [fetchMenu]);
 
   const handleCustomize = (item: MenuItem) => {
-    // TODO Phase 3: open CustomizationModal
-    console.log('Customize:', item.name);
+    setModalItem(item);
+    setIsModalOpen(true);
   };
 
   const handleAddToCart = (item: MenuItem) => {
-    // TODO Phase 3: add to cartStore with default options
-    console.log('Add to cart:', item.name);
+    // Default options: first size, first milk (or null if none), first temp (or null if none)
+    const firstSize = item.options.sizes[0];
+    const unitPrice = item.basePrice + (firstSize?.delta ?? 0);
+    const cartItem = {
+      cartItemId: crypto.randomUUID(),
+      menuItemId: item.id,
+      name: item.name,
+      unitPrice,
+      quantity: 1,
+      customizations: {
+        size: firstSize?.label ?? '',
+        milk: item.options.milks.length > 0 ? item.options.milks[0] : null,
+        temperature: item.options.temperatures.length > 0 ? item.options.temperatures[0] : null,
+        shots: null,
+        addons: [],
+        specialInstructions: '',
+      },
+    };
+    addItem(cartItem);
+    toast.success(`${item.name} added to cart`);
   };
 
   return (
@@ -96,6 +121,12 @@ export function MenuPage() {
           ))}
         </div>
       )}
+
+      <CustomizationModal
+        item={modalItem}
+        isOpen={isModalOpen}
+        onClose={() => { setIsModalOpen(false); setModalItem(null); }}
+      />
     </main>
   );
 }

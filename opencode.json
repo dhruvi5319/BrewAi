@@ -9,6 +9,8 @@
       "*": "allow"
     },
     "external_directory": {
+      "/home/daytona/.config/opencode/**": "allow",
+      "/root/.config/opencode/**": "allow",
       "~/.config/opencode/agents/**": "allow",
       "~/.config/opencode/pivota_spec-framework/**": "allow"
     },
